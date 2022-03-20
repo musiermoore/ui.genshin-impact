@@ -10,25 +10,32 @@ const routes = [
     {
         path: '/',
         name: 'Home',
+        displayName: 'У меня инфаркт',
         component: Home,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            showInNavbar: false
         }
     },
     {
         path: '/auth/register',
         name: 'Register',
         component: Register,
+        displayName: 'Регистрация',
         meta: {
-            requiresAuth: false
+            requiresAuth: false,
+            showInNavbar: false
         }
     },
     {
         path: '/auth/login',
         name: 'Login',
+        displayName: 'Авторизация',
         component: Login,
         meta: {
-            requiresAuth: false
+            requiresAuth: false,
+            showInNavbar: true,
+            showForAuthUser: false
         }
     }
 ]
@@ -41,9 +48,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.meta.requiresAuth
     const isLoggedIn = localStorage.getItem('token')
-    console.log('test');
+
     if (requiresAuth && !isLoggedIn) {
         next({ name: 'Login' })
+    } else if (isLoggedIn && (to.name === 'Login' || to.name === 'Register')) {
+        next({ name: 'Home' })
     } else {
         next()
     }
