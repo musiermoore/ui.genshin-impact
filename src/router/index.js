@@ -1,10 +1,13 @@
-import Home from "@/views/Home"
-import Register from "@/views/User/Auth/Register"
-import Login from "@/views/User/Auth/Login"
 import {
     createRouter,
     createWebHistory
 } from "vue-router";
+import Home from "@/views/Home"
+import Register from "@/views/User/Auth/Register"
+import Login from "@/views/User/Auth/Login"
+import Characters from "@/views/Character/List/Characters"
+import Weapons from "@/views/Weapon/List/Weapons"
+import Characteristics from "@/views/Characteristic/List/Characteristics"
 
 const routes = [
     {
@@ -37,7 +40,38 @@ const routes = [
             showInNavbar: true,
             showForAuthUser: false
         }
+    },
+    {
+        path: '/characters',
+        name: 'Characters',
+        displayName: 'Персонажи',
+        component: Characters,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: true
+        }
+    },
+    {
+        path: '/weapons',
+        name: 'Weapons',
+        displayName: 'Оружие',
+        component: Weapons,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: true
+        }
+    },
+    {
+        path: '/characteristics',
+        name: 'Characteristics',
+        displayName: 'Характеристики',
+        component: Characteristics,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: true
+        }
     }
+
 ]
 
 const router = createRouter({
