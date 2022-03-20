@@ -18,6 +18,11 @@
           >{{ getRouteName(route) }}</router-link>
         </li>
       </ul>
+        <button
+            class="btn btn-primary ml-auto"
+            v-if="user"
+            @click="logout"
+        >Выход</button>
     </div>
   </nav>
 </template>
@@ -33,14 +38,23 @@ export default {
       return this.currentRoute === route.name
     },
     showForCurrentUser(route) {
-      const user = this.$store.getters.user
-      console.log(user)
-      if (user) {
-        console.log(route.meta.showForAuthUser)
-        return route.meta.showForAuthUser
+      if (this.user) {
+        return (route.meta.showForAuthUser === undefined) || route.meta.showForAuthUser
+      } else if (!this.user && (route.meta.showForAuthUser || route.meta.requiresAuth)) {
+        return false
       } else {
         return true
       }
+    },
+    logout() {
+      this.$axios.post('/auth/logout')
+        .then((response) => {
+          if (response.status === 200) {
+            localStorage.removeItem('token')
+            this.$store.commit('user', null)
+            this.$router.push({ name: 'Login' })
+          }
+        })
     }
   },
   computed: {
@@ -51,6 +65,9 @@ export default {
       return this.$router.options.routes.filter(route => {
         return route.meta.showInNavbar && this.showForCurrentUser(route)
       })
+    },
+    user() {
+      return this.$store.getters.user
     }
   }
 }
