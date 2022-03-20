@@ -1,12 +1,17 @@
 <template>
-  <div>
-
-  </div>
+  <layout>
+    Register
+  </layout>
 </template>
 
 <script>
+import Layout from "@/components/Layout";
+
 export default {
-  name: "Register"
+  name: "Register",
+  components: {
+    'layout': Layout
+  }
 }
 </script>
 
