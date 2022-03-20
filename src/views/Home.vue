@@ -1,12 +1,17 @@
 <template>
-  <div>
-    Test
-  </div>
+  <layout>
+    Home
+  </layout>
 </template>
 
 <script>
+import Layout from "@/components/Layout";
+
 export default {
-  name: "Home"
+  name: "Home",
+  components: {
+    'layout': Layout
+  }
 }
 </script>
 
