@@ -8,6 +8,7 @@ import Login from "@/views/User/Auth/Login"
 import Characters from "@/views/Character/List/Characters"
 import Weapons from "@/views/Weapon/List/Weapons"
 import Characteristics from "@/views/Characteristic/List/Characteristics"
+import CharacterCreate from "@/views/Character/Admin/CharacterCreate"
 
 const routes = [
     {
@@ -52,6 +53,16 @@ const routes = [
         }
     },
     {
+        path: '/characters/create',
+        name: 'Create Character',
+        displayName: 'Персонажи',
+        component: CharacterCreate,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: false
+        }
+    },
+    {
         path: '/weapons',
         name: 'Weapons',
         displayName: 'Оружие',
@@ -75,7 +86,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/'),
     routes,
 })
 
