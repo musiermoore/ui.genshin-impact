@@ -20,10 +20,11 @@ export default {
     return {}
   },
   methods: {
-    initApi() {
+    init() {
       const { appContext } = getCurrentInstance()
 
-      appContext.config.globalProperties.$api = process.env.VUE_APP_BASE_URL
+      appContext.config.globalProperties.$storageUrl = process.env.VUE_APP_STORAGE_URL
+      appContext.config.globalProperties.$api = process.env.VUE_APP_API_URL
 
       const base = axios.create({
         baseURL: this.$api,
@@ -77,7 +78,7 @@ export default {
     }
   },
   mounted() {
-    this.initApi()
+    this.init()
     this.authenticateUser()
   }
 }
