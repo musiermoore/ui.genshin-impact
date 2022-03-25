@@ -86,10 +86,10 @@ export default {
   data() {
     return {
       characterData: {
-        name: 'Test',
-        star_id: 5,
-        element_id: 3,
-        weapon_type_id: 2
+        name: '',
+        star_id: '',
+        element_id: '',
+        weapon_type_id: ''
       },
       stars: [],
       elements: [],
