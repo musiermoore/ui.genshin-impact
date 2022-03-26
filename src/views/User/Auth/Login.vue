@@ -53,9 +53,13 @@ export default {
             }
           } else {
             console.log(response.data)
+            alert(response.data.message)
+          }
+        }).catch(error => {
+          if (error.response?.data?.message) {
+            alert(error.response.data.message)
           }
         })
-        .catch(error => console.log(error))
     }
   },
   computed: {

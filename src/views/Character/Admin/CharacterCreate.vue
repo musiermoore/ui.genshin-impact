@@ -116,6 +116,13 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.$router.push({ name: 'Characters' })
+            } else {
+              alert(response.data.message)
+            }
+          })
+          .catch(error => {
+            if (error.response?.data?.message) {
+              alert(error.response.data.message)
             }
           })
           .finally(() => this.loaded = true)
