@@ -65,8 +65,11 @@ export default {
             this.$store.commit('user', null)
             this.$router.push({ name: 'Login' })
           }
-        })
-        .finally(() => this.$store.commit('mainLoaded', true))
+        }).catch(() => {
+        localStorage.removeItem('token')
+        this.$store.commit('user', null)
+        this.$router.push({ name: 'Login' })
+      }).finally(() => this.$store.commit('mainLoaded', true))
     }
   },
   computed: {
