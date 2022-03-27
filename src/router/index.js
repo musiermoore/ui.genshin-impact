@@ -10,6 +10,7 @@ import Weapons from "@/views/Weapon/List/Weapons"
 import Characteristics from "@/views/Characteristic/List/Characteristics"
 import CharacterCreate from "@/views/Character/Admin/CharacterCreate"
 import CharacteristicCreate from "@/views/Characteristic/Admin/CharacteristicCreate"
+import CharacterEdit from "@/views/Character/Admin/CharacterEdit"
 
 const routes = [
     {
@@ -58,6 +59,16 @@ const routes = [
         name: 'Create Character',
         displayName: 'Создание персонажа',
         component: CharacterCreate,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: false
+        }
+    },
+    {
+        path: '/characters/:id',
+        name: 'Edit Character',
+        displayName: 'Редактирование персонажа',
+        component: CharacterEdit,
         meta: {
             requiresAuth: true,
             showInNavbar: false
