@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <h1>Создание персонажа</h1>
-    <form class="col-12 col-md-4" @submit.prevent="createCharacter" enctype='multipart/form-data'>
+    <form class="col-12 col-md-5" @submit.prevent="createCharacter" enctype='multipart/form-data'>
       <div class="mb-3">
         <label for="name" class="form-label">Имя персонажа:</label>
         <input type="text" class="form-control" id="name" v-model="characterData.name" required>
