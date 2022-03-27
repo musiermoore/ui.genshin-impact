@@ -67,11 +67,38 @@
       <div class="mb-3">
         <button
             type="submit"
-            class="btn btn-primary"
+            class="btn btn-primary me-2"
             id="submit"
         >Обновить</button>
+        <a
+            class="btn btn-danger"
+            id="delete"
+            @click="showDeleteModal = true"
+        >Удалить</a>
       </div>
     </form>
+
+    <div class="delete-modal" v-if="showDeleteModal">
+      <div class="modal-content">
+        <div class="modal-text mb-1">
+          Введите пароль, для удаления персонажа:
+        </div>
+        <div class="modal-password mb-2">
+          <input type="text" class="form-control" v-model="deletePassword">
+        </div>
+        <div class="modal-buttons">
+          <a
+              class="btn btn-outline-danger me-2"
+              @click="deleteCharacter($route.params.id)"
+          >Удалить</a>
+          <a
+              type="submit"
+              class="btn btn-primary"
+              @click="showDeleteModal = false"
+          >Закрыть</a>
+        </div>
+      </div>
+    </div>
   </Layout>
 </template>
 
@@ -94,7 +121,9 @@ export default {
       },
       stars: [],
       elements: [],
-      weaponTypes: []
+      weaponTypes: [],
+      showDeleteModal: false,
+      deletePassword: ''
     }
   },
   mounted() {
@@ -160,11 +189,57 @@ export default {
       if (!files.length) return;
 
       this.characterData.image = files[0]
+    },
+    deleteCharacter(id) {
+      if (this.deletePassword !== process.env.VUE_APP_DELETE_PASSWORD) {
+        alert('Неверный пароль.')
+        this.deletePassword = ''
+        return;
+      }
+
+      this.$axios.delete(`/admin/characters/${id}`)
+          .then((response) => {
+            if (response.status === 200) {
+              this.$router.push({ name: 'Characters' })
+            } else {
+              alert(response.data.message)
+            }
+          })
+          .catch(error => {
+            if (error.response?.data?.message) {
+              alert(error.response.data.message)
+            }
+          })
+          .finally(() => {
+            this.showDeleteModal = false
+            this.deletePassword = ''
+          })
     }
   }
 }
 </script>
 
 <style scoped>
+.delete-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+}
 
+.delete-modal .modal-content {
+  z-index: 1002;
+  width: 500px;
+  padding: 20px;
+}
+.delete-modal .modal-buttons {
+  display: flex;
+  justify-content: center;
+}
 </style>
