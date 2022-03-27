@@ -17,11 +17,13 @@
     <div class="characters d-flex flex-wrap" v-if="characters.length">
       <div class="character" v-for="character in characters" :key="character.id">
         <div class="character-image-block">
-          <img
-              :src="getCharacterImage(character)"
-              :alt="character.name"
-              class="character-image"
-          >
+          <router-link :to="{ name: 'Edit Character', params: { id: character.id }}">
+            <img
+                :src="getCharacterImage(character)"
+                :alt="character.name"
+                class="character-image"
+            >
+          </router-link>
         </div>
         <div class="character-info">
           {{ character.name }}
@@ -78,9 +80,9 @@ export default {
 <style scoped>
 .character {
   width: 200px;
-  height: 200px;
   position: relative;
   margin-right: 20px;
+  margin-bottom: 20px;
 }
 .character:last-of-type {
   margin-right: 0;
@@ -90,11 +92,14 @@ export default {
   width: 200px;
   height: 200px;
   position: relative;
-  border: 2px solid #666;
+  border: 1px solid #666;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 .character-image {
-  width: 198px;
-  height: 198px;
+  max-width: 198px;
+  max-height: 198px;
   padding: 0;
   margin: 0;
 }
