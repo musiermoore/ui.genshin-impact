@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout"
 
 export default {
   name: "CharacterCreate",
@@ -89,7 +89,8 @@ export default {
         name: '',
         star_id: '',
         element_id: '',
-        weapon_type_id: ''
+        weapon_type_id: '',
+        image: ''
       },
       stars: [],
       elements: [],
@@ -104,15 +105,11 @@ export default {
       const formData = new FormData()
       const data = this.characterData
 
-      const headers = {
-        // "Content-Type": "multipart/form-data"
-      }
-
       for (let key in data) {
         formData.append(key, data[key]);
       }
 
-      this.$axios.post('/admin/characters', formData, headers)
+      this.$axios.post('/admin/characters', formData)
           .then((response) => {
             if (response.status === 200) {
               this.$router.push({ name: 'Characters' })
