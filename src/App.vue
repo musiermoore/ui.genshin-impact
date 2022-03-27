@@ -89,4 +89,8 @@ export default {
 
 <style>
 @import '~bootstrap/dist/css/bootstrap.css';
+
+body {
+  font-family: Verdana, serif;
+}
 </style>
