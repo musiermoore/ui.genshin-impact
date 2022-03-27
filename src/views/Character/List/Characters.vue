@@ -14,7 +14,7 @@
 
     </div>
 
-    <div class="characters d-flex flex-wrap">
+    <div class="characters d-flex flex-wrap" v-if="characters.length">
       <div class="character" v-for="character in characters" :key="character.id">
         <div class="character-image-block">
           <img
@@ -28,16 +28,19 @@
         </div>
       </div>
     </div>
+    <DataLoader v-else />
   </layout>
 </template>
 
 <script>
 import Layout from "@/components/Layout"
+import DataLoader from "@/components/Loaders/DataLoader"
 
 export default {
   name: "Characters",
   components: {
-    'layout': Layout
+    'layout': Layout,
+    DataLoader
   },
   data() {
     return {
