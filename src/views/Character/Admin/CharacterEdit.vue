@@ -1,114 +1,135 @@
 <template>
   <Layout>
-    <h1>Создание персонажа</h1>
-    <form class="col-12 col-md-5" @submit.prevent="updateCharacter($route.params.id)" enctype='multipart/form-data'>
-      <div class="mb-3">
-        <label for="name" class="form-label">Имя персонажа:</label>
-        <input type="text" class="form-control" id="name" v-model="characterData.name" required>
-      </div>
-      <div class="mb-3">
-        <label for="slug" class="form-label">Уникальный идентификатор</label>
-        <input type="text" class="form-control" id="slug" v-model="characterData.slug">
-        <small>Оставить пустым или имя персонажа на английском</small>
-      </div>
-      <div class="mb-3">
-        <label for="stars" class="form-label">Редкость:</label>
-        <select
-            class="form-select"
-            name="star_id"
-            id="stars"
-            v-model="characterData.star_id"
-            required
-        >
-          <option value="" disabled selected>Выберите звездочку</option>
-          <option v-for="star in stars" :key="star.id" :value="star.star">
-            {{ star.star }}
-          </option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="elements" class="form-label">Стихия:</label>
-        <select
-            class="form-select"
-            name="star_id"
-            id="elements"
-            v-model="characterData.element_id"
-            required
-        >
-          <option value="" disabled selected>Выберите стихию</option>
-          <option v-for="element in elements" :key="element.id" :value="element.id">
-            {{ element.element }}
-          </option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="stars" class="form-label">Тип оружия:</label>
-        <select
-            class="form-select"
-            name="weapon_type_id"
-            id="weapon_types"
-            v-model="characterData.weapon_type_id"
-            required
-        >
-          <option value="" disabled selected>Выберите тип оружия</option>
-          <option v-for="weaponType in weaponTypes" :key="weaponType.id" :value="weaponType.id">
-            {{ weaponType.type }}
-          </option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="image" class="form-label">Изображение</label>
-        <input class="form-control" type="file" id="image" @change="onFileChange">
-      </div>
-
-      <div class="mb-3">
-        <button
-            type="submit"
-            class="btn btn-primary me-2"
-            id="submit"
-        >Обновить</button>
-        <a
-            class="btn btn-danger"
-            id="delete"
-            @click="showDeleteModal = true"
-        >Удалить</a>
-      </div>
-    </form>
-
-    <div class="delete-modal" v-if="showDeleteModal">
-      <div class="modal-content">
-        <div class="modal-text mb-1">
-          Введите пароль, для удаления персонажа:
+    <div v-if="loaded">
+      <h1>Создание персонажа</h1>
+      <form class="col-12 col-md-5" @submit.prevent="updateCharacter($route.params.id)" enctype='multipart/form-data'>
+        <div class="mb-3">
+          <label for="name" class="form-label">Имя персонажа:</label>
+          <input type="text" class="form-control" id="name" v-model="characterData.name" required>
         </div>
-        <div class="modal-password mb-2">
-          <input type="text" class="form-control" v-model="deletePassword">
+        <div class="mb-3">
+          <label for="slug" class="form-label">Уникальный идентификатор</label>
+          <input type="text" class="form-control" id="slug" v-model="characterData.slug">
+          <small>Оставить пустым или имя персонажа на английском</small>
         </div>
-        <div class="modal-buttons">
-          <a
-              class="btn btn-outline-danger me-2"
-              @click="deleteCharacter($route.params.id)"
-          >Удалить</a>
-          <a
+        <div class="mb-3">
+          <label for="stars" class="form-label">Редкость:</label>
+          <select
+              class="form-select"
+              name="star_id"
+              id="stars"
+              v-model="characterData.star_id"
+              required
+          >
+            <option value="" disabled selected>Выберите звездочку</option>
+            <option v-for="star in stars" :key="star.id" :value="star.star">
+              {{ star.star }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="elements" class="form-label">Стихия:</label>
+          <select
+              class="form-select"
+              name="star_id"
+              id="elements"
+              v-model="characterData.element_id"
+              required
+          >
+            <option value="" disabled selected>Выберите стихию</option>
+            <option v-for="element in elements" :key="element.id" :value="element.id">
+              {{ element.element }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="stars" class="form-label">Тип оружия:</label>
+          <select
+              class="form-select"
+              name="weapon_type_id"
+              id="weapon_types"
+              v-model="characterData.weapon_type_id"
+              required
+          >
+            <option value="" disabled selected>Выберите тип оружия</option>
+            <option v-for="weaponType in weaponTypes" :key="weaponType.id" :value="weaponType.id">
+              {{ weaponType.type }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Изображение</label>
+          <input class="form-control" type="file" id="image" @change="onFileChange">
+        </div>
+
+        <div class="mb-3">
+          <button
               type="submit"
-              class="btn btn-primary"
-              @click="showDeleteModal = false"
-          >Закрыть</a>
+              class="btn btn-primary me-2"
+              id="submit"
+          >Обновить</button>
+          <a
+              class="btn btn-danger"
+              id="delete"
+              @click="showDeleteModal = true"
+          >Удалить</a>
         </div>
+      </form>
+
+      <div class="delete-modal" v-if="showDeleteModal">
+        <div class="modal-content">
+          <div class="modal-text mb-1">
+            Введите пароль, для удаления персонажа:
+          </div>
+          <div class="modal-password mb-2">
+            <input type="text" class="form-control" v-model="deletePassword">
+          </div>
+          <div class="modal-buttons">
+            <a
+                class="btn btn-outline-danger me-2"
+                @click="deleteCharacter($route.params.id)"
+            >Удалить</a>
+            <a
+                type="submit"
+                class="btn btn-primary"
+                @click="showDeleteModal = false"
+            >Закрыть</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="levels">
+        <h2>Уровни персонажа:</h2>
+        <div class="character-levels" v-if="character.character_levels && character.character_levels.length > 0">
+          <div v-for="characterLevel in character.character_levels" :key="characterLevel.id">
+            <router-link
+                :to="{ name: 'Character Characteristics', params: { characterId: character.id, levelId: characterLevel.id }}"
+                class="character-level"
+                tag="div"
+            >
+              {{ characterLevel.level.level }}/{{ characterLevel.ascension.max_level }}
+            </router-link>
+          </div>
+        </div>
+        <h3 v-else>Результатов нет.</h3>
       </div>
     </div>
+    <DataLoader v-else />
   </Layout>
 </template>
 
 <script>
 import Layout from "@/components/Layout"
+import DataLoader from "@/components/Loaders/DataLoader";
 
 export default {
   name: "CharacterEdit",
   components: {
-    Layout
+    Layout,
+    DataLoader
   },
   data() {
     return {
@@ -119,11 +140,13 @@ export default {
         weapon_type_id: '',
         image: '',
       },
+      character: {},
       stars: [],
       elements: [],
       weaponTypes: [],
       showDeleteModal: false,
-      deletePassword: ''
+      deletePassword: '',
+      loaded: false
     }
   },
   mounted() {
@@ -166,15 +189,15 @@ export default {
               this.weaponTypes = data.weapon_types
               this.elements = data.elements
 
-              const character = data.character
+              this.character = data.character
 
               this.characterData = {
-                name: character.name,
-                slug: character.slug,
-                star_id: character.star_id,
-                element_id: character.element_id,
-                weapon_type_id: character.weapon_type_id,
-                image_path: character.image
+                name: this.character.name,
+                slug: this.character.slug,
+                star_id: this.character.star_id,
+                element_id: this.character.element_id,
+                weapon_type_id: this.character.weapon_type_id,
+                image_path: this.character.image
               }
             } else {
               this.$router.push({ name: 'Characters' })
@@ -241,5 +264,32 @@ export default {
 .delete-modal .modal-buttons {
   display: flex;
   justify-content: center;
+}
+
+.character-levels {
+  display: flex;
+  flex-wrap: wrap;
+  width: 750px;
+  justify-content: flex-start;
+}
+
+.character-levels .character-level {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 6px 6px 0;
+  border: 1px solid #666;
+  border-radius: 15px;
+  width: 80px;
+  height: 40px;
+  cursor: pointer;
+  text-decoration: none;
+  color: rgba(3, 56, 141, 0.8);
+}
+.character-levels .character-level:hover {
+  background-color: #0d6efd;
+  border: 0;
+  color: #fff;
+  transition-duration: 0.2s;
 }
 </style>
