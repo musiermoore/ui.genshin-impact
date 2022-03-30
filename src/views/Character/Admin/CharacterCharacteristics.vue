@@ -81,7 +81,8 @@ export default {
       characteristicSaveData: {
         characteristic_id: '',
         value: '',
-        characteristic_name: ''
+        characteristic_name: '',
+        in_percent: false
       },
       loaded: false
     }
@@ -112,7 +113,8 @@ export default {
                 name: data.characteristic_name,
                 pivot: {
                   value: data.value
-                }
+                },
+                in_percent: data.in_percent
               })
             } else {
               this.characterLevel.characteristics[index].pivot.value = data.value
@@ -147,6 +149,8 @@ export default {
         return characteristic.id === characteristicId
       })
       this.characteristicSaveData.characteristic_name = characteristic.name
+      this.characteristicSaveData.in_percent = characteristic.in_percent === 1
+
       if (!characteristicId) {
         this.characteristicSaveData.value = ''
       } else {
