@@ -1,0 +1,9 @@
+:root {
+    --geo-color: rgba(186, 136, 20, 0.81);
+    --anemo-color: rgba(5, 170, 125, 0.7);
+    --pyro-color: rgba(220, 67, 75, 0.84);
+    --hydro-color: rgba(23, 77, 213, 0.82);
+    --electro-color: rgba(145, 64, 219, 0.82);
+    --cryo-color: rgba(51, 195, 232, 0.69);
+    --dendro-color: #15a340;
+}
