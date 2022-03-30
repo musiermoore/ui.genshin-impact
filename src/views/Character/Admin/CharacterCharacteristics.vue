@@ -80,7 +80,8 @@ export default {
       characteristics: [],
       characteristicSaveData: {
         characteristic_id: '',
-        value: ''
+        value: '',
+        characteristic_name: ''
       },
       loaded: false
     }
@@ -105,7 +106,15 @@ export default {
             const index = this.characterLevel.characteristics.findIndex((characteristic) => {
               return characteristic.id === data.characteristic_id
             })
-            if (index !== -1) {
+            if (index === -1) {
+              this.characterLevel.characteristics.push({
+                id: data.characteristic_id,
+                name: data.characteristic_name,
+                pivot: {
+                  value: data.value
+                }
+              })
+            } else {
               this.characterLevel.characteristics[index].pivot.value = data.value
             }
           } else {
@@ -134,7 +143,10 @@ export default {
     },
     fillValue() {
       const characteristicId = this.characteristicSaveData.characteristic_id
-
+      const characteristic = this.characteristics.find(characteristic => {
+        return characteristic.id === characteristicId
+      })
+      this.characteristicSaveData.characteristic_name = characteristic.name
       if (!characteristicId) {
         this.characteristicSaveData.value = ''
       } else {
