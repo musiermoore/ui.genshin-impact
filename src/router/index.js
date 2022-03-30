@@ -11,6 +11,7 @@ import Characteristics from "@/views/Characteristic/List/Characteristics"
 import CharacterCreate from "@/views/Character/Admin/CharacterCreate"
 import CharacteristicCreate from "@/views/Characteristic/Admin/CharacteristicCreate"
 import CharacterEdit from "@/views/Character/Admin/CharacterEdit"
+import CharacterCharacteristics from "@/views/Character/Admin/CharacterCharacteristics"
 
 const routes = [
     {
@@ -69,6 +70,16 @@ const routes = [
         name: 'Edit Character',
         displayName: 'Редактирование персонажа',
         component: CharacterEdit,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: false
+        }
+    },
+    {
+        path: '/characters/:characterId/levels/:levelId',
+        name: 'Character Characteristics',
+        displayName: 'Характеристики персонажа',
+        component: CharacterCharacteristics,
         meta: {
             requiresAuth: true,
             showInNavbar: false
