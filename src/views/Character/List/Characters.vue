@@ -16,7 +16,7 @@
 
     <div class="characters d-flex flex-wrap" v-if="characters.length">
       <div class="character" v-for="character in characters" :key="character.id">
-        <div class="character-image-block">
+        <div :class="['character-image-block', getBackgroundColorByElement(character.element)]">
           <router-link :to="{ name: 'Edit Character', params: { id: character.id }}">
             <img
                 :src="getCharacterImage(character)"
@@ -69,6 +69,9 @@ export default {
       return mainImage
           ? `${this.$storageUrl}/${mainImage.path}`
           : null
+    },
+    getBackgroundColorByElement(element) {
+      return element.slug + '-background'
     }
   },
   mounted() {
