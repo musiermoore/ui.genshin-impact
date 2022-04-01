@@ -49,7 +49,7 @@
 
           <div class="mb-3">
             <label for="characteristic-value" class="form-label">Значение:</label>
-            <input type="number" class="form-control" id="characteristic-value" v-model="characteristicSaveData.value" required>
+            <input type="number" step="any" class="form-control" id="characteristic-value" v-model="characteristicSaveData.value" required>
           </div>
 
           <div class="mb-3">
