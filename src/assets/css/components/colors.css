@@ -1,0 +1,69 @@
+.geo-color {
+    color: var(--geo-color)
+}
+.geo-background {
+    background-color: var(--geo-color);
+}
+.geo-border {
+    border-color: var(--geo-color);
+}
+
+.anemo-color {
+    color: var(--anemo-color)
+}
+.anemo-background {
+    background-color: var(--anemo-color);
+}
+.anemo-border {
+    border-color: var(--anemo-color);
+}
+
+.pyro-color {
+    color: var(--pyro-color)
+}
+.pyro-background {
+    background-color: var(--pyro-color);
+}
+.pyro-border {
+    border-color: var(--pyro-color);
+}
+
+.hydro-color {
+    color: var(--hydro-color)
+}
+.hydro-background {
+    background-color: var(--hydro-color);
+}
+.hydro-border {
+    border-color: var(--hydro-color);
+}
+
+.electro-color {
+    color: var(--electro-color)
+}
+.electro-background {
+    background-color: var(--electro-color);
+}
+.electro-border {
+    border-color: var(--electro-color);
+}
+
+.cryo-color {
+    color: var(--cryo-color)
+}
+.cryo-background {
+    background-color: var(--cryo-color);
+}
+.cryo-border {
+    border-color: var(--cryo-color);
+}
+
+.dendro-color {
+    color: var(--dendro-color)
+}
+.dendro-background {
+    background-color: var(--dendro-color);
+}
+.dendro-border {
+    border-color: var(--dendro-color);
+}
