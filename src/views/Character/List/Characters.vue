@@ -1,6 +1,6 @@
 <template>
   <layout>
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="lists-header">
       <h1>Персонажи:</h1>
       <div>
         <router-link
@@ -8,26 +8,30 @@
             class="btn btn-primary"
             tag="button"
         >
-          Создать персонажа
+          Добавить персонажа
         </router-link>
       </div>
-
     </div>
 
-    <div class="characters d-flex flex-wrap" v-if="characters.length">
-      <div class="character" v-for="character in characters" :key="character.id">
-        <div :class="['character-image-block', getBackgroundColorByElement(character.element)]">
-          <router-link :to="{ name: 'Edit Character', params: { id: character.id }}">
-            <img
-                :src="getCharacterImage(character)"
-                :alt="character.name"
-                class="character-image"
-            >
-          </router-link>
+    <div v-if="loaded">
+      <div class="lists" v-if="characters && characters.length">
+        <div class="list-item" v-for="character in characters" :key="character.id">
+          <div :class="['list-item-image-block', getBackgroundColorByElement(character.element)]">
+            <router-link :to="{ name: 'Edit Character', params: { id: character.id }}">
+              <img
+                  :src="getCharacterImage(character)"
+                  :alt="character.name"
+                  class="list-item-image"
+              >
+            </router-link>
+          </div>
+          <div class="list-item-info">
+            {{ character.name }}
+          </div>
         </div>
-        <div class="character-info">
-          {{ character.name }}
-        </div>
+      </div>
+      <div v-else>
+        Нет результатов.
       </div>
     </div>
     <DataLoader v-else />
@@ -79,36 +83,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.character {
-  width: 200px;
-  position: relative;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-.character:last-of-type {
-  margin-right: 0;
-}
-
-.character-image-block {
-  width: 200px;
-  height: 200px;
-  position: relative;
-  border: 1px solid #666;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-.character-image {
-  max-width: 198px;
-  max-height: 198px;
-  padding: 0;
-  margin: 0;
-}
-.character-info {
-  display: flex;
-  justify-content: center;
-}
-
-</style>
