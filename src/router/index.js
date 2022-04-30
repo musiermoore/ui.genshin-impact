@@ -12,6 +12,8 @@ import CharacterCreate from "@/views/Character/Admin/CharacterCreate"
 import CharacteristicCreate from "@/views/Characteristic/Admin/CharacteristicCreate"
 import CharacterEdit from "@/views/Character/Admin/CharacterEdit"
 import CharacterCharacteristics from "@/views/Character/Admin/CharacterCharacteristics"
+import WeaponCreate from "@/views/Weapon/Admin/WeaponCreate"
+import WeaponEdit from "@/views/Weapon/Admin/WeaponEdit"
 
 const routes = [
     {
@@ -93,6 +95,26 @@ const routes = [
         meta: {
             requiresAuth: true,
             showInNavbar: true
+        }
+    },
+    {
+        path: '/weapons/create',
+        name: 'Create Weapon',
+        displayName: 'Создание оружия',
+        component: WeaponCreate,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: false
+        }
+    },
+    {
+        path: '/weapons/:id',
+        name: 'Edit Weapon',
+        displayName: 'Редактирование оружия',
+        component: WeaponEdit,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: false
         }
     },
     {
