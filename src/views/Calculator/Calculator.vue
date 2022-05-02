@@ -98,7 +98,7 @@ export default {
   },
   data() {
     return {
-      loaded: true,
+      loaded: false,
       characters: [],
       selectedCharacterId: '',
       selectedCharacter: null,
