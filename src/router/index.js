@@ -14,6 +14,7 @@ import CharacterEdit from "@/views/Character/Admin/CharacterEdit"
 import CharacterCharacteristics from "@/views/Character/Admin/CharacterCharacteristics"
 import WeaponCreate from "@/views/Weapon/Admin/WeaponCreate"
 import WeaponEdit from "@/views/Weapon/Admin/WeaponEdit"
+import Calculator from "../views/Calculator/Calculator"
 
 const routes = [
     {
@@ -24,6 +25,16 @@ const routes = [
         meta: {
             requiresAuth: true,
             showInNavbar: false
+        }
+    },
+    {
+        path: '/calculator',
+        name: 'Calculator',
+        displayName: 'Калькулятор',
+        component: Calculator,
+        meta: {
+            requiresAuth: true,
+            showInNavbar: true
         }
     },
     {
