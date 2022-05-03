@@ -192,12 +192,10 @@ export default {
 
       const keys = Object.keys(characteristics);
 
-      console.log(keys);
-
       keys.forEach((key) => {
         const characteristic = characteristics[key]
         const slug = characteristic['slug']
-        console.log(slug);
+
         if (characteristic) {
           if (slug === 'hp-percent') {
             calculatedCharacteristics['hp']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('hp') +
@@ -208,6 +206,9 @@ export default {
           } else if (slug === 'def-percent') {
             calculatedCharacteristics['def']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('def') +
                 (this.findCharacterCharacteristics('def') * characteristic['pivot']['value'] / 100))
+          } else if (slug === 'energy-recharge') {
+            calculatedCharacteristics['energy-recharge']['pivot']['value'] = calculatedCharacteristics['energy-recharge']['pivot']['value'] +
+                characteristic['pivot']['value']
           } else {
             calculatedCharacteristics[slug]['pivot']['value'] = characteristic['pivot']['value']
           }
