@@ -69,7 +69,7 @@
           </div>
           <div v-if="selectedCharacter" class="character-characteristics">
             <h4>Характеристики</h4>
-            <div v-if="characterCharacteristics">
+            <div v-if="calculatedCharacteristics">
               <table class="table table-strip">
                 <thead>
                   <tr>
@@ -79,7 +79,7 @@
                 </thead>
                 <tbody>
                   <tr
-                      v-for="characteristic in characterCharacteristics"
+                      v-for="characteristic in calculatedCharacteristics"
                       :value="characteristic.id"
                       :key="characteristic.id"
                   >
@@ -114,29 +114,52 @@ export default {
   data() {
     return {
       loaded: false,
-      characters: [],
       selectedCharacterId: '',
       selectedCharacter: null,
       selectedLevelIndex: 0,
       characterLevel: null,
-      characterCharacteristics: []
+      characterCharacteristics: [],
+      calculatedCharacteristics: {}
     }
   },
   mounted() {
+    this.getCharacteristics()
     this.getCharacters()
   },
   computed: {
-
+    characters() {
+      return this.$store.getters.calculatorCharacters
+    },
+    defaultCharacteristics() {
+      return this.$store.getters.calculatorCharacteristics
+    }
   },
   methods: {
     getCharacters() {
+      if (this.characters?.length) {
+        this.loaded = true
+        return;
+      }
+
       this.$axios.get('/characters/calculator')
           .then((response) => {
             if (response.status === 200) {
-              this.characters = response.data.data.characters
+              this.$store.commit('calculatorCharacters', response.data.data.characters)
             }
           })
           .finally(() => this.loaded = true)
+    },
+    getCharacteristics() {
+      if (this.characters?.length) {
+        return
+      }
+
+      this.$axios.get('/characters/calculator/characteristics')
+          .then((response) => {
+            if (response.status === 200) {
+              this.$store.commit('calculatorCharacteristics', response.data.data.characteristics)
+            }
+          })
     },
     updateSelectedCharacter() {
       this.selectedCharacter = this.characters.find(character => character.id === this.selectedCharacterId)
@@ -147,6 +170,7 @@ export default {
       this.characterLevel = this.selectedCharacter.character_levels[this.selectedLevelIndex]
       if (this.characterLevel?.characteristics) {
         this.characterCharacteristics = this.characterLevel.characteristics
+        this.calculateCharacteristics(this.characterLevel.characteristics)
       }
     },
     getCharacterImage(character) {
@@ -161,6 +185,38 @@ export default {
     },
     getBackgroundColorByElement(element) {
       return element.slug + '-background'
+    },
+    calculateCharacteristics(characteristics) {
+      const calculatedCharacteristics = this.defaultCharacteristics
+
+      const keys = Object.keys(characteristics);
+
+      console.log(keys);
+
+      keys.forEach((key) => {
+        const characteristic = characteristics[key]
+        const slug = characteristic['slug']
+        console.log(slug);
+        if (characteristic) {
+          if (slug === 'hp-percent') {
+            calculatedCharacteristics['hp']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('hp') +
+                (this.findCharacterCharacteristics('hp') * characteristic['pivot']['value'] / 100))
+          } else if (slug === 'atk-percent') {
+            calculatedCharacteristics['atk']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('atk') +
+                (this.findCharacterCharacteristics('atk') * characteristic['pivot']['value'] / 100))
+          } else if (slug === 'def-percent') {
+            calculatedCharacteristics['def']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('def') +
+                (this.findCharacterCharacteristics('def') * characteristic['pivot']['value'] / 100))
+          } else {
+            calculatedCharacteristics[slug]['pivot']['value'] = characteristic['pivot']['value']
+          }
+        }
+      });
+
+      this.calculatedCharacteristics = calculatedCharacteristics
+    },
+    findCharacterCharacteristics(name) {
+      return this.characterCharacteristics.find(characteristic => characteristic.slug === name)?.pivot?.value
     }
   }
 }
