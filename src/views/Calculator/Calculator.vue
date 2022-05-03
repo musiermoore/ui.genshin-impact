@@ -104,6 +104,7 @@
 <script>
 import Layout from "@/components/Layout"
 import DataLoader from "@/components/Loaders/DataLoader"
+import _ from 'lodash'
 
 export default {
   name: "Calculator",
@@ -187,7 +188,7 @@ export default {
       return element.slug + '-background'
     },
     calculateCharacteristics(characteristics) {
-      const calculatedCharacteristics = this.defaultCharacteristics
+      const calculatedCharacteristics = _.cloneDeep(this.defaultCharacteristics)
 
       const keys = Object.keys(characteristics);
 
