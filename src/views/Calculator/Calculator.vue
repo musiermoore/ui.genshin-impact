@@ -67,16 +67,31 @@
               </div>
             </div>
           </div>
-          <div class="character-characteristics">
+          <div v-if="selectedCharacter" class="character-characteristics">
             <h4>Характеристики</h4>
             <div v-if="characterCharacteristics">
-              <div
-                  v-for="characteristic in characterCharacteristics"
-                  :value="characteristic.id"
-                  :key="characteristic.id"
-              >
-                {{ characteristic.name }}: {{ characteristic.pivot.value }}{{ characteristic.in_percent ? '%' : '' }}
-              </div>
+              <table class="table table-strip">
+                <thead>
+                  <tr>
+                    <th>Название</th>
+                    <th>Значение</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                      v-for="characteristic in characterCharacteristics"
+                      :value="characteristic.id"
+                      :key="characteristic.id"
+                  >
+                    <td>
+                      {{ characteristic.name }}
+                    </td>
+                    <td>
+                      {{ characteristic.pivot.value }}{{ characteristic.in_percent ? '%' : '' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
       </div>
