@@ -33,7 +33,7 @@ const routes = [
         displayName: 'Калькулятор',
         component: Calculator,
         meta: {
-            requiresAuth: true,
+            requiresAuth: false,
             showInNavbar: true
         }
     },
