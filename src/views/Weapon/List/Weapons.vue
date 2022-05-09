@@ -71,7 +71,7 @@ export default {
 
       return mainImage
           ? `${this.$storageUrl}/${mainImage.path}`
-          : null
+          : `${this.$defaultImageUrl}`
     }
   },
   mounted() {

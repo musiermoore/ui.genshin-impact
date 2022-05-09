@@ -24,6 +24,7 @@ export default {
       const { appContext } = getCurrentInstance()
 
       appContext.config.globalProperties.$storageUrl = process.env.VUE_APP_STORAGE_URL
+      appContext.config.globalProperties.$defaultImageUrl = process.env.VUE_APP_DEFAULT_IMAGE_URL
       appContext.config.globalProperties.$api = process.env.VUE_APP_API_URL
 
       const base = axios.create({
