@@ -8,7 +8,8 @@ const store = createStore({
             user: null,
             mainLoaded: false,
             calculatorCharacters: {},
-            calculatorCharacteristics: {}
+            calculatorCharacteristics: {},
+            calculatorWeapons: []
         }
     },
     mutations: {
@@ -23,6 +24,9 @@ const store = createStore({
         },
         calculatorCharacteristics (state, characteristics) {
             state.calculatorCharacteristics = characteristics
+        },
+        calculatorWeapons (state, weapons) {
+            state.calculatorWeapons = weapons
         }
     },
     getters: {
@@ -37,6 +41,9 @@ const store = createStore({
         },
         calculatorCharacteristics (state) {
             return state.calculatorCharacteristics
+        },
+        calculatorWeapons (state) {
+            return state.calculatorWeapons
         }
     }
 })

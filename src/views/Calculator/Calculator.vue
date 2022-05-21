@@ -30,15 +30,15 @@
                   type="range"
                   class="form-range"
                   :disabled="!selectedCharacter"
-                  v-model="selectedLevelIndex"
-                  @input="getSelectedLevel"
+                  v-model="selectedCharacterLevelIndex"
+                  @input="getSelectedCharacterLevel"
                   min="0"
                   :max="selectedCharacter.character_levels.length - 1"
               >
             </div>
             <div v-if="selectedCharacterId">
               <h4>О персонаже:</h4>
-              <div class="d-flex" style="gap: 10px 10px" v-if="selectedCharacter">
+              <div class="d-flex flex-wrap mb-2" style="gap: 10px 10px" v-if="selectedCharacter">
                 <div
                     :class="['list-item-image-block', getBackgroundColorByElement(selectedCharacter.element)]"
                     style="width: 200px; border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 3px"
@@ -63,6 +63,71 @@
                   <div>
                     Тип оружия: {{ selectedCharacter.weapon_type.type }}
                   </div>
+                </div>
+              </div>
+              <div class="d-flex flex-column">
+                <h5>Оружие:</h5>
+                <select
+                    name="selected-weapon"
+                    id="selected-weapon"
+                    class="form-control"
+                    v-model="selectedWeaponId"
+                    @change="updateSelectedWeapon"
+                >
+                  <option value="0">Без оружия</option>
+                  <option
+                      v-for="weapon in characterWeapons"
+                      :key="weapon.id"
+                      :value="weapon.id"
+                  >
+                    {{ weapon.name }}
+                  </option>
+                </select>
+                <div v-if="selectedWeaponId" class="d-flex flex-wrap" style="gap: 10px 10px">
+                  <div v-if="selectedWeapon && selectedWeaponId !== 0" class="my-2">
+                    <img
+                        :src="getWeaponImage(selectedWeapon)"
+                        :alt="selectedWeapon.name"
+                        class="list-item-image"
+                        style="max-width: 198px; border: 1px solid #666; border-radius: 4px;"
+                    >
+                  </div>
+                  <div v-if="selectedWeapon && selectedWeaponId !== 0">
+                    <div>
+                      <div>
+                        Имя: {{ selectedWeapon.name }}
+                      </div>
+                      <div>
+                        Редкость: {{ selectedWeapon.star.star }}
+                      </div>
+                      <div>
+                        Тип оружия: {{ selectedWeapon.weapon_type.type }}
+                      </div>
+                      <div>
+                        Базовая атака:
+                        {{ selectedWeaponCharacteristics?.base_atk ? selectedWeaponCharacteristics?.base_atk : 0 }}
+                      </div>
+                      <div>
+                        {{ selectedWeapon.sub_stat.name }}:
+                        {{ selectedWeaponCharacteristics?.sub_stat?.value ? selectedWeaponCharacteristics.sub_stat.value : 0 }}
+                      </div>
+                      <div class="mb-3 range" v-if="selectedWeapon">
+                        <label for="selected-character" class="form-label">
+                          Уровень: {{ selectedWeaponCharacteristics.level.level }}/{{ selectedWeaponCharacteristics.ascension.max_level }}
+                        </label>
+                        <input
+                            type="range"
+                            class="form-range"
+                            :disabled="!selectedWeapon"
+                            v-model="selectedWeaponLevelIndex"
+                            @input="getSelectedWeaponLevel"
+                            min="0"
+                            :max="selectedWeapon.characteristics.length - 1"
+                        >
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -115,27 +180,23 @@ export default {
   data() {
     return {
       loaded: false,
+      weaponLoaded: false,
       selectedCharacterId: '',
       selectedCharacter: null,
-      selectedLevelIndex: 0,
+      selectedCharacterLevelIndex: 0,
       characterLevel: null,
       characterCharacteristics: [],
       calculatedCharacteristics: {},
-      selectedWeapon: {
-        name: 'test',
-        base_atk: 0,
-        // sub_stat: {
-        //   slug: 'elemental-mastery',
-        //   value: 36,
-        //   in_percent: 0
-        // }
-        sub_stat: null
-      }
+      selectedWeaponId: 0,
+      selectedWeaponLevelIndex: 0,
+      selectedWeapon: {},
+      selectedWeaponCharacteristics: {}
     }
   },
   mounted() {
     this.getCharacteristics()
     this.getCharacters()
+    this.getWeapons()
   },
   computed: {
     characters() {
@@ -143,6 +204,12 @@ export default {
     },
     defaultCharacteristics() {
       return this.$store.getters.calculatorCharacteristics
+    },
+    weapons() {
+      return this.$store.getters.calculatorWeapons
+    },
+    characterWeapons() {
+      return this.weapons.filter(weapon => weapon.weapon_type.slug === this.selectedCharacter.weapon_type.slug)
     }
   },
   methods: {
@@ -160,8 +227,22 @@ export default {
           })
           .finally(() => this.loaded = true)
     },
+    getWeapons() {
+      if (this.weapons?.length) {
+        this.weaponLoaded = true
+        return;
+      }
+
+      this.$axios.get('/weapons/calculator')
+          .then((response) => {
+            if (response.status === 200) {
+              this.$store.commit('calculatorWeapons', response.data.data.weapons)
+            }
+          })
+          .finally(() => this.weaponLoaded = true)
+    },
     getCharacteristics() {
-      if (this.defaultCharacteristics?.length) {
+      if (!_.isEmpty(this.defaultCharacteristics)) {
         return
       }
 
@@ -169,27 +250,58 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.$store.commit('calculatorCharacteristics', response.data.data.characteristics)
-              console.log(response.data.data.characteristics)
             }
           })
     },
     updateSelectedCharacter() {
       this.selectedCharacter = this.characters.find(character => character.id === this.selectedCharacterId)
-      this.selectedLevelIndex = 0
-      this.getSelectedLevel()
+      this.selectedCharacterLevelIndex = 0
+      this.getSelectedCharacterLevel()
     },
-    getSelectedLevel() {
-      this.characterLevel = this.selectedCharacter.character_levels[this.selectedLevelIndex]
+    updateSelectedWeapon() {
+      this.selectedWeapon = this.weapons.find(weapon => weapon.id === this.selectedWeaponId)
+      this.selectedWeaponLevelIndex = 0
+      this.getSelectedWeaponLevel()
+    },
+    getSelectedCharacterLevel() {
+      this.characterLevel = this.selectedCharacter.character_levels[this.selectedCharacterLevelIndex]
       if (this.characterLevel?.characteristics) {
         this.characterCharacteristics = this.characterLevel.characteristics
+        this.calculateCharacteristics()
+      }
+    },
+    getSelectedWeaponLevel() {
+      const weaponCharacteristic = this.selectedWeapon.characteristics[this.selectedWeaponLevelIndex]
+      if (!_.isEmpty(weaponCharacteristic)) {
+        this.selectedWeaponCharacteristics = weaponCharacteristic
         this.calculateCharacteristics()
       }
     },
     getCharacterImage(character) {
       const images = character.images
 
+      if (!images) {
+        return null
+      }
+
       const mainImage = images.find(image => image.image_type.slug === 'main')
 
+      return mainImage
+          ? `${this.$storageUrl}/${mainImage.path}`
+          : null
+    },
+    getWeaponImage(weapon) {
+      if (!weapon) {
+        return null
+      }
+
+      const images = weapon.images
+
+      if (!images) {
+        return null
+      }
+
+      const mainImage = images.find(image => image.image_type.slug === 'main')
 
       return mainImage
           ? `${this.$storageUrl}/${mainImage.path}`
@@ -224,9 +336,9 @@ export default {
         })
 
         // a weapon
-        if (this.selectedWeapon?.sub_stat?.slug === percentCharacteristicName && this.selectedWeapon?.sub_stat?.value) {
+        if (this.selectedWeapon?.sub_stat?.slug === percentCharacteristicName && this.selectedWeaponCharacteristics?.sub_stat?.value) {
           const subStat = (
-              this.selectedWeapon.sub_stat.value / 100
+              this.selectedWeaponCharacteristics.sub_stat.value / 100
           ).toFixed(2)
 
           additionalValue += Number(Math.floor(baseValue * subStat))
@@ -239,8 +351,8 @@ export default {
           }
         }
       } else {
-        if (this.selectedWeapon?.sub_stat?.slug === characteristicName && this.selectedWeapon?.sub_stat?.value) {
-          const subStat = this.selectedWeapon.sub_stat.value
+        if (this.selectedWeapon?.sub_stat?.slug === characteristicName && this.selectedWeaponCharacteristics?.sub_stat?.value) {
+          const subStat = this.selectedWeaponCharacteristics.sub_stat.value
 
           additionalValue += Number(subStat)
         }
@@ -252,8 +364,8 @@ export default {
       return this.characterCharacteristics.find(characteristic => characteristic.slug === name)?.value
     },
     getBaseCharacteristicValue(characteristicName) {
-      const weaponAtk = characteristicName === 'atk' && this.selectedWeapon?.base_atk
-          ? this.selectedWeapon?.base_atk
+      const weaponAtk = characteristicName === 'atk' && this.selectedWeaponCharacteristics?.base_atk
+          ? this.selectedWeaponCharacteristics.base_atk
           : 0
 
       const baseValue = this.findCharacterCharacteristics(characteristicName) + Math.floor(weaponAtk)
