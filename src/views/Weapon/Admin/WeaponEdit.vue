@@ -35,7 +35,7 @@
                 class="form-select"
                 name="star_id"
                 id="elements"
-                v-model="weaponData.main_characteristic_id"
+                v-model="weaponData.sub_stat_id"
                 required
             >
               <option value="" disabled selected>Выберите характеристику</option>
@@ -135,13 +135,13 @@
             >Обновить</button>
           </div>
 
-          <div class="mb-3" v-if="weaponData.main_characteristic && weaponData.characteristics">
+          <div class="mb-3" v-if="weaponData.sub_stat && weaponData.characteristics">
             <table class="table">
               <thead>
               <tr>
                 <th>Уровень</th>
                 <th>Базовая атака</th>
-                <th>{{ weaponData.main_characteristic.name }}</th>
+                <th>{{ weaponData.sub_stat.name }}</th>
               </tr>
               </thead>
               <tbody>
@@ -198,7 +198,7 @@ export default {
       weaponData: {
         name: '',
         star_id: '',
-        main_characteristic_id: '',
+        sub_stat_id: '',
         weapon_type_id: '',
         image: '',
         description: '',
@@ -261,7 +261,7 @@ export default {
 
               this.stars = data.stars
               this.weaponTypes = data.weapon_types
-              this.mainCharacteristics = data.main_characteristics
+              this.mainCharacteristics = data.sub_stats
               this.levels = data.levels
 
               this.weapon = data.weapon
@@ -270,12 +270,12 @@ export default {
                 name: this.weapon.name,
                 slug: this.weapon.slug,
                 star_id: this.weapon.star_id,
-                main_characteristic_id: this.weapon.main_characteristic_id,
+                sub_stat_id: this.weapon.sub_stat_id,
                 weapon_type_id: this.weapon.weapon_type_id,
                 image_path: this.weapon.image,
                 description: this.weapon.description,
                 characteristics: this.weapon.characteristics,
-                main_characteristic: this.weapon.main_characteristic
+                sub_stat: this.weapon.sub_stat
               }
             } else {
               this.$router.push({ name: 'Characters' })

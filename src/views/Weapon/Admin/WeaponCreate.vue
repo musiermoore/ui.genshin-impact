@@ -33,7 +33,7 @@
             class="form-select"
             name="star_id"
             id="elements"
-            v-model="weaponData.main_characteristic_id"
+            v-model="weaponData.sub_stat_id"
             required
         >
           <option value="" disabled selected>Выберите характеристику</option>
@@ -102,7 +102,7 @@ export default {
         name: '',
         slug: '',
         star_id: '',
-        main_characteristic_id: '',
+        sub_stat_id: '',
         weapon_type_id: '',
         image: '',
         description: ''
@@ -146,7 +146,7 @@ export default {
 
             this.stars = data.stars
             this.weaponTypes = data.weapon_types
-            this.mainCharacteristics = data.main_characteristics
+            this.subStats = data.sub_stats
           })
           .finally(() => this.loaded = true)
     },
