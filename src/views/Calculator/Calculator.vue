@@ -123,13 +123,13 @@ export default {
       calculatedCharacteristics: {},
       selectedWeapon: {
         name: 'test',
-        base_atk: 42,
-        sub_stat: {
-          slug: 'elemental-mastery',
-          value: 36,
-          in_percent: 0
-        }
-        // sub_stat: null
+        base_atk: 0,
+        // sub_stat: {
+        //   slug: 'elemental-mastery',
+        //   value: 36,
+        //   in_percent: 0
+        // }
+        sub_stat: null
       }
     }
   },
