@@ -87,7 +87,7 @@
                       {{ characteristic.name }}
                     </td>
                     <td>
-                      {{ characteristic.pivot.value }}{{ characteristic.in_percent ? '%' : '' }}
+                      {{ characteristic.value }}{{ characteristic.in_percent ? '%' : '' }}
                     </td>
                   </tr>
                 </tbody>
@@ -120,7 +120,17 @@ export default {
       selectedLevelIndex: 0,
       characterLevel: null,
       characterCharacteristics: [],
-      calculatedCharacteristics: {}
+      calculatedCharacteristics: {},
+      selectedWeapon: {
+        name: 'test',
+        base_atk: 42,
+        sub_stat: {
+          slug: 'elemental-mastery',
+          value: 36,
+          in_percent: 0
+        }
+        // sub_stat: null
+      }
     }
   },
   mounted() {
@@ -151,7 +161,7 @@ export default {
           .finally(() => this.loaded = true)
     },
     getCharacteristics() {
-      if (this.characters?.length) {
+      if (this.defaultCharacteristics?.length) {
         return
       }
 
@@ -159,6 +169,7 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.$store.commit('calculatorCharacteristics', response.data.data.characteristics)
+              console.log(response.data.data.characteristics)
             }
           })
     },
@@ -171,7 +182,7 @@ export default {
       this.characterLevel = this.selectedCharacter.character_levels[this.selectedLevelIndex]
       if (this.characterLevel?.characteristics) {
         this.characterCharacteristics = this.characterLevel.characteristics
-        this.calculateCharacteristics(this.characterLevel.characteristics)
+        this.calculateCharacteristics()
       }
     },
     getCharacterImage(character) {
@@ -187,38 +198,72 @@ export default {
     getBackgroundColorByElement(element) {
       return element.slug + '-background'
     },
-    calculateCharacteristics(characteristics) {
+    calculateCharacteristics() {
       const calculatedCharacteristics = _.cloneDeep(this.defaultCharacteristics)
 
-      const keys = Object.keys(characteristics);
+      const calculatedKeys = Object.keys(calculatedCharacteristics)
 
-      keys.forEach((key) => {
-        const characteristic = characteristics[key]
-        const slug = characteristic['slug']
-
-        if (characteristic) {
-          if (slug === 'hp-percent') {
-            calculatedCharacteristics['hp']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('hp') +
-                (this.findCharacterCharacteristics('hp') * characteristic['pivot']['value'] / 100))
-          } else if (slug === 'atk-percent') {
-            calculatedCharacteristics['atk']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('atk') +
-                (this.findCharacterCharacteristics('atk') * characteristic['pivot']['value'] / 100))
-          } else if (slug === 'def-percent') {
-            calculatedCharacteristics['def']['pivot']['value'] = Math.floor(this.findCharacterCharacteristics('def') +
-                (this.findCharacterCharacteristics('def') * characteristic['pivot']['value'] / 100))
-          } else if (slug === 'energy-recharge') {
-            calculatedCharacteristics['energy-recharge']['pivot']['value'] = calculatedCharacteristics['energy-recharge']['pivot']['value'] +
-                characteristic['pivot']['value']
-          } else {
-            calculatedCharacteristics[slug]['pivot']['value'] = characteristic['pivot']['value']
-          }
-        }
-      });
+      calculatedKeys.forEach((key) => {
+        calculatedCharacteristics[key]['value'] = this.calculate(key)
+      })
 
       this.calculatedCharacteristics = calculatedCharacteristics
     },
+    calculate(characteristicName) {
+      const characteristics = this.characterLevel.characteristics
+
+      let additionalValue = Number(0.00)
+
+      const percentCharacteristicName = this.getPercentCharacteristicName(characteristicName)
+
+      const baseValue = this.getBaseCharacteristicValue(characteristicName)
+
+      if (percentCharacteristicName) {
+        const characteristic = characteristics.find((characteristic) => {
+          return characteristic.slug === percentCharacteristicName
+        })
+
+        // a weapon
+        if (this.selectedWeapon?.sub_stat?.slug === percentCharacteristicName && this.selectedWeapon?.sub_stat?.value) {
+          const subStat = (
+              this.selectedWeapon.sub_stat.value / 100
+          ).toFixed(2)
+
+          additionalValue += Number(Math.floor(baseValue * subStat))
+        }
+
+        // a character characteristic
+        if (characteristics) {
+          if (characteristic) {
+            additionalValue += Number(Math.floor(baseValue * (characteristic['value'] / 100)).toFixed(2))
+          }
+        }
+      } else {
+        if (this.selectedWeapon?.sub_stat?.slug === characteristicName && this.selectedWeapon?.sub_stat?.value) {
+          const subStat = this.selectedWeapon.sub_stat.value
+
+          additionalValue += Number(subStat)
+        }
+      }
+
+      return baseValue + additionalValue
+    },
     findCharacterCharacteristics(name) {
-      return this.characterCharacteristics.find(characteristic => characteristic.slug === name)?.pivot?.value
+      return this.characterCharacteristics.find(characteristic => characteristic.slug === name)?.value
+    },
+    getBaseCharacteristicValue(characteristicName) {
+      const weaponAtk = characteristicName === 'atk' && this.selectedWeapon?.base_atk
+          ? this.selectedWeapon?.base_atk
+          : 0
+
+      const baseValue = this.findCharacterCharacteristics(characteristicName) + Math.floor(weaponAtk)
+
+      return baseValue ? baseValue : 0
+    },
+    getPercentCharacteristicName(characteristicName) {
+      return ['atk', 'hp', 'def'].includes(characteristicName)
+          ? `${characteristicName}-percent`
+          : null
     }
   }
 }
