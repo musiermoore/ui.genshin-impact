@@ -202,8 +202,11 @@ export default {
     characters() {
       return this.$store.getters.calculatorCharacters
     },
-    defaultCharacteristics() {
-      return this.$store.getters.calculatorCharacteristics
+    defaultCharacteristics: {
+      cache: false,
+      get() {
+        return this.$store.getters.calculatorCharacteristics
+      }
     },
     weapons() {
       return this.$store.getters.calculatorWeapons
@@ -260,7 +263,7 @@ export default {
     },
     updateSelectedWeapon() {
       this.selectedWeapon = this.weapons.find(weapon => weapon.id === this.selectedWeaponId)
-      console.log(this.selectedWeapon);
+
       this.selectedWeaponLevelIndex = 0
       this.getSelectedWeaponLevel()
     },
@@ -365,15 +368,27 @@ export default {
 
       return baseValue + additionalValue
     },
-    findCharacterCharacteristics(name) {
+    findCharacterCharacteristic(name) {
       return this.characterCharacteristics.find(characteristic => characteristic.slug === name)?.value
+        ? this.characterCharacteristics.find(characteristic => characteristic.slug === name).value
+        : 0
+    },
+    findDefaultCharacterCharacteristic(name) {
+      const defaultCharacteristics = this.defaultCharacteristics
+
+      return Object.prototype.hasOwnProperty.call(defaultCharacteristics, name) && ['energy-recharge'].includes(name)
+        ? defaultCharacteristics[name].value
+        : 0
     },
     getBaseCharacteristicValue(characteristicName) {
       const weaponAtk = characteristicName === 'atk' && this.selectedWeaponCharacteristics?.base_atk
           ? this.selectedWeaponCharacteristics.base_atk
           : 0
 
-      const baseValue = this.findCharacterCharacteristics(characteristicName) + Math.floor(weaponAtk)
+      const characteristicValue = this.findCharacterCharacteristic(characteristicName)
+      const defaultCharacteristicValue = this.findDefaultCharacterCharacteristic(characteristicName)
+
+      const baseValue = Number(characteristicValue) + Number(defaultCharacteristicValue) + Math.floor(weaponAtk)
 
       return baseValue ? baseValue : 0
     },
