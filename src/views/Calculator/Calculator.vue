@@ -260,9 +260,14 @@ export default {
       this.selectedCharacter = this.characters.find(character => character.id === this.selectedCharacterId)
       this.selectedCharacterLevelIndex = 0
       this.getSelectedCharacterLevel()
+      this.updateSelectedWeapon()
     },
     updateSelectedWeapon() {
-      this.selectedWeapon = this.weapons.find(weapon => weapon.id === this.selectedWeaponId)
+      this.selectedWeapon = this.characterWeapons.find(weapon => weapon.id === this.selectedWeaponId)
+
+      if (!this.selectedWeapon) {
+        this.selectedWeaponId = 0
+      }
 
       this.selectedWeaponLevelIndex = 0
       this.getSelectedWeaponLevel()
