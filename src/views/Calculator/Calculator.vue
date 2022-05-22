@@ -259,10 +259,16 @@ export default {
       this.selectedCharacter = this.characters.find(character => character.id === this.selectedCharacterId)
       this.selectedCharacterLevelIndex = 0
       this.getSelectedCharacterLevel()
-      this.updateSelectedWeapon()
+
+      if (!this.findWeaponByCurrenCharacter()) {
+        this.updateSelectedWeapon()
+      }
+    },
+    findWeaponByCurrenCharacter() {
+      return this.characterWeapons.find(weapon => weapon.id === this.selectedWeaponId)
     },
     updateSelectedWeapon() {
-      this.selectedWeapon = this.characterWeapons.find(weapon => weapon.id === this.selectedWeaponId)
+      this.selectedWeapon = this.findWeaponByCurrenCharacter()
 
       if (!this.selectedWeapon) {
         this.selectedWeaponId = 0
