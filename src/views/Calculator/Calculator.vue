@@ -260,6 +260,7 @@ export default {
     },
     updateSelectedWeapon() {
       this.selectedWeapon = this.weapons.find(weapon => weapon.id === this.selectedWeaponId)
+      console.log(this.selectedWeapon);
       this.selectedWeaponLevelIndex = 0
       this.getSelectedWeaponLevel()
     },
@@ -271,11 +272,15 @@ export default {
       }
     },
     getSelectedWeaponLevel() {
-      const weaponCharacteristic = this.selectedWeapon.characteristics[this.selectedWeaponLevelIndex]
-      if (!_.isEmpty(weaponCharacteristic)) {
+      const weaponCharacteristic = this.selectedWeapon?.characteristics
+          ? this.selectedWeapon.characteristics[this.selectedWeaponLevelIndex]
+          : null
+      if (_.isEmpty(weaponCharacteristic)) {
+        this.selectedWeaponCharacteristics = null
+      } else {
         this.selectedWeaponCharacteristics = weaponCharacteristic
-        this.calculateCharacteristics()
       }
+      this.calculateCharacteristics()
     },
     getCharacterImage(character) {
       const images = character.images
