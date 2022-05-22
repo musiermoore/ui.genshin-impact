@@ -88,7 +88,7 @@
                         :src="getWeaponImage(selectedWeapon)"
                         :alt="selectedWeapon.name"
                         class=""
-                        style="width: auto; max-height: 200px;"
+                        style="max-height: 200px; width: 200px"
                     >
                   </div>
                   <div v-if="selectedWeapon && selectedWeaponId !== 0">
