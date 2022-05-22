@@ -151,7 +151,7 @@
                       {{ characteristic.name }}
                     </td>
                     <td>
-                      {{ characteristic.value }}{{ characteristic.in_percent ? '%' : '' }}
+                      {{ Math.round((Number(characteristic.value) + Number.EPSILON) * 100) / 100 }}{{ characteristic.in_percent ? '%' : '' }}
                     </td>
                   </tr>
                 </tbody>
