@@ -22,32 +22,16 @@
                 </option>
               </select>
             </div>
-            <div class="mb-3 range" v-if="selectedCharacter && selectedCharacter.character_levels">
-              <label for="selected-character" class="form-label">
-                Уровень: {{ characterLevel.level.level }}/{{ characterLevel.ascension.max_level }}
-              </label>
-              <input
-                  type="range"
-                  class="form-range"
-                  :disabled="!selectedCharacter"
-                  v-model="selectedCharacterLevelIndex"
-                  @input="getSelectedCharacterLevel"
-                  min="0"
-                  :max="selectedCharacter.character_levels.length - 1"
-              >
-            </div>
             <div v-if="selectedCharacterId">
-              <h4>О персонаже:</h4>
               <div class="d-flex flex-wrap mb-2" style="gap: 10px 10px" v-if="selectedCharacter">
                 <div
                     :class="['list-item-image-block', getBackgroundColorByElement(selectedCharacter.element)]"
-                    style="width: 200px; border: 1px solid rgba(0, 0, 0, 0.3); border-radius: 3px"
+                    style=""
                 >
                   <img
                       :src="getCharacterImage(selectedCharacter)"
                       :alt="selectedCharacter.name"
                       class="list-item-image"
-                      style="width: 198px"
                   >
                 </div>
                 <div>
@@ -63,14 +47,29 @@
                   <div>
                     Тип оружия: {{ selectedCharacter.weapon_type.type }}
                   </div>
+
+                  <div class="mb-3 range" v-if="selectedCharacter && selectedCharacter.character_levels">
+                    <label for="selected-character" class="form-label">
+                      Уровень: {{ characterLevel.level.level }}/{{ characterLevel.ascension.max_level }}
+                    </label>
+                    <input
+                        type="range"
+                        class="form-range"
+                        :disabled="!selectedCharacter"
+                        v-model="selectedCharacterLevelIndex"
+                        @input="getSelectedCharacterLevel"
+                        min="0"
+                        :max="selectedCharacter.character_levels.length - 1"
+                    >
+                  </div>
                 </div>
               </div>
               <div class="d-flex flex-column">
-                <h5>Оружие:</h5>
+                <h4>Оружие:</h4>
                 <select
                     name="selected-weapon"
                     id="selected-weapon"
-                    class="form-control"
+                    class="form-control mb-2"
                     v-model="selectedWeaponId"
                     @change="updateSelectedWeapon"
                 >
@@ -84,12 +83,12 @@
                   </option>
                 </select>
                 <div v-if="selectedWeaponId" class="d-flex flex-wrap" style="gap: 10px 10px">
-                  <div v-if="selectedWeapon && selectedWeaponId !== 0" class="my-2">
+                  <div v-if="selectedWeapon && selectedWeaponId !== 0" class="d-flex justify-content-center list-item-image my-2">
                     <img
                         :src="getWeaponImage(selectedWeapon)"
                         :alt="selectedWeapon.name"
-                        class="list-item-image"
-                        style="max-width: 198px; border: 1px solid #666; border-radius: 4px;"
+                        class=""
+                        style="width: auto; max-height: 200px;"
                     >
                   </div>
                   <div v-if="selectedWeapon && selectedWeaponId !== 0">
@@ -421,5 +420,13 @@ export default {
 .calculator .character-characteristics {
   flex-basis: 60%;
   max-width: 60%;
+}
+
+.list-item-image {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  border: 1px solid rgba(30, 30, 30, 0.5);
+  border-radius: 3px;
 }
 </style>
