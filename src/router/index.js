@@ -23,7 +23,7 @@ const routes = [
         displayName: 'У меня инфаркт',
         component: Home,
         meta: {
-            requiresAuth: true,
+            requiresAuth: false,
             showInNavbar: false
         }
     },
@@ -54,7 +54,7 @@ const routes = [
         component: Login,
         meta: {
             requiresAuth: false,
-            showInNavbar: true,
+            showInNavbar: false,
             showForAuthUser: false
         }
     },
@@ -160,7 +160,7 @@ router.beforeEach((to, from, next) => {
     const isLoggedIn = localStorage.getItem('token')
 
     if (requiresAuth && !isLoggedIn) {
-        next({ name: 'Login' })
+        next({ name: 'Home' })
     } else if (isLoggedIn && (to.name === 'Login' || to.name === 'Register')) {
         next({ name: 'Home' })
     } else {
