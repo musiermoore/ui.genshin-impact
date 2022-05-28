@@ -20,11 +20,11 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 10000001;
-  background: #f5f5f5;
+  background: var(--background-color);
 }
 
 .loader {
-  color: #666;
+  color: #fff;
   font-size: 20px;
   margin: 100px auto;
   width: 1em;
