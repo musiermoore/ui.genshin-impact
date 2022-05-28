@@ -1,35 +1,38 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light mb-2">
-    <div class="container container-fluid collapse navbar-collapse">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <router-link
-              :class="['nav-link fw-bold ps-0']"
-              :to="{ name: 'Home' }"
-          >У меня инфаркт</router-link>
-        </li>
+  <nav class="navbar-side">
+    <div>
+      <div class="navbar-side-home">
+        <nav-icon :size="18" />
+        <router-link
+            :class="['']"
+            :to="{ name: 'Home' }"
+        >Главная</router-link>
+      </div>
+      <ul class="navbar-side-list">
         <li
-            class="nav-item"
+            class="navbar-side-item"
             v-for="route in routes" :key="route"
         >
+          <nav-icon :size="15" />
           <router-link
-              :class="['nav-link', { active: isActive(route) }]"
+              :class="['', { active: isActive(route) }]"
               :to="{ name: route.name }"
           >{{ getRouteName(route) }}</router-link>
         </li>
       </ul>
-        <button
-            class="btn btn-primary ml-auto"
-            v-if="user"
-            @click="logout"
-        >Выход</button>
     </div>
+
   </nav>
 </template>
 
 <script>
+import NavIcon from "@/components/Icons/NavIcon"
+
 export default {
   name: "Navbar",
+  components: {
+      'nav-icon': NavIcon
+  },
   methods: {
     getRouteName(route) {
       return route.displayName ? route.displayName : route.name
@@ -45,16 +48,6 @@ export default {
       } else {
         return true
       }
-    },
-    logout() {
-      this.$axios.post('/auth/logout')
-        .then((response) => {
-          if (response.status === 200) {
-            localStorage.removeItem('token')
-            this.$store.commit('user', null)
-            this.$router.push({ name: 'Login' })
-          }
-        })
     }
   },
   computed: {
@@ -74,5 +67,39 @@ export default {
 </script>
 
 <style scoped>
+.navbar-side {
+  padding: 1.5rem 2.5rem;
+  min-width: 270px;
+  max-width: 350px;
+  position: sticky;
+  background-color: var(--main-color);
+}
 
+.navbar-side-home {
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.navbar-side-home,
+.navbar-side-item {
+  display: flex;
+  align-items: center;
+  gap: 0 10px;
+}
+
+.navbar-side-list {
+  margin: 0;
+  padding: 0 0 0 1.5rem;
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.navbar-side-item {
+  font-size: 0.9rem;
+  gap: 0 8px;
+  margin-bottom: 0.4rem;
+}
 </style>

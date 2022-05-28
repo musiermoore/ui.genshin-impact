@@ -414,18 +414,20 @@ export default {
 <style scoped>
 .calculator {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   gap: 1rem 2rem;
 }
 
 .calculator .character-info {
-  flex-basis: 40%;
-  max-width: 40%;
+  flex-basis: 35%;
+  /*max-width: 45%;*/
 }
 
 .calculator .character-characteristics {
-  flex-basis: 60%;
-  max-width: 60%;
+  flex-basis: 50%;
+  /*max-width: 50%;*/
+
 }
 
 .list-item-image {
@@ -434,5 +436,10 @@ export default {
   position: relative;
   border: 1px solid rgba(30, 30, 30, 0.5);
   border-radius: 3px;
+}
+
+table.table {
+  color: #fff;
+  width: 100%;
 }
 </style>
