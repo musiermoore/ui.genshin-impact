@@ -2,3 +2,20 @@
 @import "components/colors.css";
 @import "components/lists.css";
 
+body {
+    background: var(--background-color);
+    color: #fff;
+    font-size: 16px;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover {
+    color: #fff;
+    transition-duration: 0.25s;
+    border-bottom: 1px solid #fff;
+}
