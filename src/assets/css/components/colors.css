@@ -7,6 +7,10 @@
 .geo-border {
     border-color: var(--geo-color);
 }
+.geo-shadow {
+    -webkit-filter: drop-shadow(1px 0 5px var(--geo-color));
+    filter: drop-shadow(1px 0 5px var(--geo-color));
+}
 
 .anemo-color {
     color: var(--anemo-color)
@@ -16,6 +20,10 @@
 }
 .anemo-border {
     border-color: var(--anemo-color);
+}
+.anemo-shadow {
+    -webkit-filter: drop-shadow(1px 0 5px var(--anemo-color));
+    filter: drop-shadow(1px 0 5px var(--anemo-color));
 }
 
 .pyro-color {
@@ -27,6 +35,10 @@
 .pyro-border {
     border-color: var(--pyro-color);
 }
+.pyro-shadow {
+    -webkit-filter: drop-shadow(1px 0 5px var(--pyro-color));
+    filter: drop-shadow(1px 0 5px var(--pyro-color));
+}
 
 .hydro-color {
     color: var(--hydro-color)
@@ -36,6 +48,10 @@
 }
 .hydro-border {
     border-color: var(--hydro-color);
+}
+.hydro-shadow {
+    -webkit-filter: drop-shadow(1px 0 5px var(--hydro-color));
+    filter: drop-shadow(1px 0 5px var(--hydro-color));
 }
 
 .electro-color {
@@ -47,6 +63,10 @@
 .electro-border {
     border-color: var(--electro-color);
 }
+.electro-shadow {
+    -webkit-filter: drop-shadow(1px 0 5px var(--electro-color));
+    filter: drop-shadow(1px 0 5px var(--electro-color));
+}
 
 .cryo-color {
     color: var(--cryo-color)
@@ -57,6 +77,10 @@
 .cryo-border {
     border-color: var(--cryo-color);
 }
+.cryo-shadow {
+    -webkit-filter: drop-shadow(1px 0 5px var(--cryo-color));
+    filter: drop-shadow(1px 0 5px var(--cryo-color));
+}
 
 .dendro-color {
     color: var(--dendro-color)
@@ -66,4 +90,8 @@
 }
 .dendro-border {
     border-color: var(--dendro-color);
+}
+.dendro-shadow {
+    -webkit-filter: drop-shadow(1px 0 5px var(--dendro-color));
+    filter: drop-shadow(1px 0 5px var(--dendro-color));
 }
