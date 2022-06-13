@@ -9,8 +9,8 @@
                 <label for="selected-character" class="form-label">Персонаж:</label>
                 <CharacterCard
                     ref="selected_character"
-                    class="pointer"
                     :character="selectedCharacter"
+                    :pointer="true"
                     @click="openCharacterSelector"
                 />
                 <CharacterSelector
@@ -18,7 +18,6 @@
                     :show="showCharacterSelectorModal"
                     :positions="selectorPositions"
                     @selectCharacter="updateSelectedCharacterId($event)"
-                    style="cursor: pointer"
                 />
               </h4>
             </div>

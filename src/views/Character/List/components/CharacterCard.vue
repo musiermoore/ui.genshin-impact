@@ -1,6 +1,6 @@
 <template>
   <div class="character-card">
-    <div :class="['character-image-block']">
+    <div :class="['character-image-block']" :style="styles">
       <img
           :src="getCharacterImage(character)"
           :alt="character ? character.name : ''"
@@ -14,11 +14,19 @@
 export default {
   name: "CharacterCard",
   props: {
-    character: Object
+    character: Object,
+    pointer: Boolean
   },
   data() {
     return {
 
+    }
+  },
+  computed: {
+    styles() {
+      return {
+        cursor: this.pointer ? 'pointer' : 'auto'
+      }
     }
   },
   mounted() {
