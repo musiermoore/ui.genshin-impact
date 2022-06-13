@@ -12,13 +12,13 @@
                     class="pointer"
                     :character="selectedCharacter"
                     @click="openCharacterSelector"
-                    style="cursor: pointer"
                 />
                 <CharacterSelector
                     ref="character_selector"
                     :show="showCharacterSelectorModal"
                     :positions="selectorPositions"
                     @selectCharacter="updateSelectedCharacterId($event)"
+                    style="cursor: pointer"
                 />
               </h4>
             </div>
