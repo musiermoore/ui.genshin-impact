@@ -1,6 +1,5 @@
 <template>
   <Layout>
-    <h1 class="mb-3">Калькулятор</h1>
     <div v-if="loaded">
       <form method="GET">
         <div class="calculator">
@@ -8,32 +7,24 @@
             <div class="mb-3">
               <h4>
                 <label for="selected-character" class="form-label">Персонаж:</label>
+                <CharacterCard
+                    ref="selected_character"
+                    class="pointer"
+                    :character="selectedCharacter"
+                    @click="openCharacterSelector"
+                    style="cursor: pointer"
+                />
+                <CharacterSelector
+                    ref="character_selector"
+                    :show="showCharacterSelectorModal"
+                    :positions="selectorPositions"
+                    @selectCharacter="updateSelectedCharacterId($event)"
+                />
               </h4>
-              <select
-                  name="selected-character"
-                  id="selected-character"
-                  class="form-control"
-                  v-model="selectedCharacterId"
-                  @change="updateSelectedCharacter"
-              >
-                <option value="" disabled>Выберите персонажа</option>
-                <option v-for="character in characters" :key="character.id" :value="character.id">
-                  {{ character.name }}
-                </option>
-              </select>
             </div>
             <div v-if="selectedCharacterId">
               <div class="d-flex flex-wrap mb-2" style="gap: 10px 10px" v-if="selectedCharacter">
-                <div
-                    :class="['list-item-image-block', getBackgroundColorByElement(selectedCharacter.element)]"
-                    style=""
-                >
-                  <img
-                      :src="getCharacterImage(selectedCharacter)"
-                      :alt="selectedCharacter.name"
-                      class="list-item-image"
-                  >
-                </div>
+
                 <div>
                   <div>
                     Имя: {{ selectedCharacter.name }}
@@ -42,7 +33,7 @@
                     Элемент: {{ selectedCharacter.element.element }}
                   </div>
                   <div>
-                    Редкость: {{ selectedCharacter.star.star }}
+                    Редкость: {{ selectedCharacter.star }}
                   </div>
                   <div>
                     Тип оружия: {{ selectedCharacter.weapon_type.type }}
@@ -50,7 +41,7 @@
 
                   <div class="mb-3 range" v-if="selectedCharacter && selectedCharacter.character_levels">
                     <label for="selected-character" class="form-label">
-                      Уровень: {{ characterLevel.level.level }}/{{ characterLevel.ascension.max_level }}
+                      Уровень: {{ characterLevel.level }}/{{ characterLevel.max_level }}
                     </label>
                     <input
                         type="range"
@@ -169,10 +160,14 @@
 import Layout from "@/components/Layout"
 import DataLoader from "@/components/Loaders/DataLoader"
 import _ from 'lodash'
+import CharacterCard from "../Character/List/components/CharacterCard"
+import CharacterSelector from "./components/CharacterSelector"
 
 export default {
   name: "Calculator",
   components: {
+    CharacterSelector,
+    CharacterCard,
     DataLoader,
     Layout
   },
@@ -189,7 +184,12 @@ export default {
       selectedWeaponId: 0,
       selectedWeaponLevelIndex: 0,
       selectedWeapon: {},
-      selectedWeaponCharacteristics: {}
+      selectedWeaponCharacteristics: {},
+      selectorPositions: {
+        right: '100px',
+        top: null
+      },
+      showCharacterSelectorModal: false
     }
   },
   mounted() {
@@ -254,6 +254,12 @@ export default {
               this.$store.commit('calculatorCharacteristics', response.data.data.characteristics)
             }
           })
+    },
+    updateSelectedCharacterId(characterId) {
+      console.log(characterId);
+      this.selectedCharacterId = characterId
+      this.showCharacterSelectorModal = false
+      this.updateSelectedCharacter()
     },
     updateSelectedCharacter() {
       this.selectedCharacter = this.characters.find(character => character.id === this.selectedCharacterId)
@@ -406,6 +412,18 @@ export default {
       return ['atk', 'hp', 'def'].includes(characteristicName)
           ? `${characteristicName}-percent`
           : null
+    },
+    openCharacterSelector() {
+      this.showCharacterSelectorModal = true
+      this.setModalPositions()
+    },
+    setModalPositions() {
+      const $element = this.$refs.selected_character.$el
+
+      this.selectorPositions = {
+        'left': Number($element.offsetLeft) + 'px',
+        'top': $element.offsetTop + $element.clientHeight + 25 + 'px'
+      }
     }
   }
 }
@@ -421,12 +439,10 @@ export default {
 
 .calculator .character-info {
   flex-basis: 35%;
-  /*max-width: 45%;*/
 }
 
 .calculator .character-characteristics {
   flex-basis: 50%;
-  /*max-width: 50%;*/
 
 }
 
