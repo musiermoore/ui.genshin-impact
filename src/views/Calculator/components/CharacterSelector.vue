@@ -1,7 +1,11 @@
 <template>
   <div v-if="show" class="character-selector" :style="positions">
     <div class="selector-characters" v-for="character in characters" :key="character.id">
-      <CharacterCard :character="character" @click="selectCharacter(character)" />
+      <CharacterCard
+          :character="character"
+          @click="selectCharacter(character)"
+          :pointer="true"
+      />
     </div>
   </div>
 </template>
