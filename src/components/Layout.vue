@@ -3,7 +3,7 @@
     <navbar-top />
 
     <section class="d-flex">
-      <navbar-side />
+      <navbar-side class="navbar" />
       <div class="content">
         <slot></slot>
       </div>
@@ -27,6 +27,8 @@ export default {
 <style scoped>
 .content {
   padding: 1rem 1.5rem;
+  margin-left: calc(var(--navbar-side-width));
+  margin-top: calc(var(--navbar-top-height) + 10px);
   width: 100%;
 }
 </style>
