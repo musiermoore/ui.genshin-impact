@@ -68,10 +68,11 @@ export default {
 
 <style scoped>
 .navbar-side {
-  padding: 1.5rem 2.5rem;
+  padding: calc(1.5rem + var(--navbar-top-height)) 2.5rem;
   min-width: 270px;
   max-width: 350px;
-  position: sticky;
+  position: fixed;
+  height: 100%;
   background-color: var(--main-color);
 }
 

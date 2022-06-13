@@ -1,22 +1,7 @@
 <template>
-  <nav class="">
-    <div class="d-flex justify-content-between" style="padding: 0.5rem 1.5rem">
+  <nav class="navbar-top">
+    <div class="d-flex justify-content-between" style="padding: 0rem 1.5rem">
       <ul class="navbar-nav">
-<!--        <li class="nav-item">-->
-<!--          <router-link-->
-<!--              :class="['nav-link fw-bold ps-0']"-->
-<!--              :to="{ name: 'Home' }"-->
-<!--          >У меня инфаркт</router-link>-->
-<!--        </li>-->
-<!--        <li-->
-<!--            class="nav-item"-->
-<!--            v-for="route in routes" :key="route"-->
-<!--        >-->
-<!--          <router-link-->
-<!--              :class="['nav-link', { active: isActive(route) }]"-->
-<!--              :to="{ name: route.name }"-->
-<!--          >{{ getRouteName(route) }}</router-link>-->
-<!--        </li>-->
       </ul>
       <button
           class="btn btn-primary my-2"
@@ -74,8 +59,12 @@ export default {
 </script>
 
 <style scoped>
-nav {
-  min-height: 50px;
-  border-bottom: 1px solid #fff;
+nav.navbar-top {
+  width: 100%;
+  min-height: var(--navbar-top-height);
+  border-bottom: 2px solid #fff;
+  position: fixed;
+  background-color: var(--main-color);
+  z-index: 10001;
 }
 </style>
