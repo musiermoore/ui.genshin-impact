@@ -16,18 +16,7 @@
     <div v-if="loaded">
       <div class="lists" v-if="characters && characters.length">
         <div class="list-item" v-for="character in characters" :key="character.id">
-          <div :class="['list-item-image-block', getBackgroundColorByElement(character.element)]">
-            <router-link :to="{ name: 'Edit Character', params: { id: character.id }}">
-              <img
-                  :src="getCharacterImage(character)"
-                  :alt="character.name"
-                  class="list-item-image"
-              >
-            </router-link>
-          </div>
-          <div class="list-item-info">
-            {{ character.name }}
-          </div>
+          <CharacterCard :character="character" />
         </div>
       </div>
       <div v-else>
@@ -41,10 +30,12 @@
 <script>
 import Layout from "@/components/Layout"
 import DataLoader from "@/components/Loaders/DataLoader"
+import CharacterCard from "./components/CharacterCard"
 
 export default {
   name: "Characters",
   components: {
+    CharacterCard,
     'layout': Layout,
     DataLoader
   },
@@ -63,19 +54,6 @@ export default {
             }
           })
           .finally(() => this.loaded = true)
-    },
-    getCharacterImage(character) {
-      const images = character.images
-
-      const mainImage = images.find(image => image.image_type.slug === 'main')
-
-
-      return mainImage
-          ? `${this.$storageUrl}/${mainImage.path}`
-          : null
-    },
-    getBackgroundColorByElement(element) {
-      return element.slug + '-background'
     }
   },
   mounted() {
@@ -83,3 +61,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/*.character-shadow {*/
+/*  -webkit-filter: drop-shadow(1px 0 4px var(--geo-color));*/
+/*  filter: drop-shadow(1px 0 4px var(--geo-color));*/
+/*}*/
+</style>
