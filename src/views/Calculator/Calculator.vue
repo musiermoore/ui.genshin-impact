@@ -7,6 +7,8 @@
             <div class="mb-3">
               <h4>
                 <label for="selected-character" class="form-label">Персонаж:</label>
+              </h4>
+              <div>
                 <CharacterCard
                     ref="selected_character"
                     :character="selectedCharacter"
@@ -19,41 +21,15 @@
                     :positions="selectorPositions"
                     @selectCharacter="updateSelectedCharacterId($event)"
                 />
-              </h4>
+              </div>
             </div>
             <div v-if="selectedCharacterId">
-              <div class="d-flex flex-wrap mb-2" style="gap: 10px 10px" v-if="selectedCharacter">
-
-                <div>
-                  <div>
-                    Имя: {{ selectedCharacter.name }}
-                  </div>
-                  <div>
-                    Элемент: {{ selectedCharacter.element.element }}
-                  </div>
-                  <div>
-                    Редкость: {{ selectedCharacter.star }}
-                  </div>
-                  <div>
-                    Тип оружия: {{ selectedCharacter.weapon_type.type }}
-                  </div>
-
-                  <div class="mb-3 range" v-if="selectedCharacter && selectedCharacter.character_levels">
-                    <label for="selected-character" class="form-label">
-                      Уровень: {{ characterLevel.level }}/{{ characterLevel.max_level }}
-                    </label>
-                    <input
-                        type="range"
-                        class="form-range"
-                        :disabled="!selectedCharacter"
-                        v-model="selectedCharacterLevelIndex"
-                        @input="getSelectedCharacterLevel"
-                        min="0"
-                        :max="selectedCharacter.character_levels.length - 1"
-                    >
-                  </div>
-                </div>
-              </div>
+              <SelectedCharacterInfo
+                  :selectedCharacter="selectedCharacter"
+                  :characterLevel="characterLevel"
+                  :selectedCharacterLevelIndex="selectedCharacterLevelIndex"
+                  @set-selected-character-level="setSelectedCharacterLevel($event)"
+              />
               <div class="d-flex flex-column">
                 <h4>Оружие:</h4>
                 <select
@@ -116,7 +92,6 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -159,12 +134,14 @@
 import Layout from "@/components/Layout"
 import DataLoader from "@/components/Loaders/DataLoader"
 import _ from 'lodash'
-import CharacterCard from "../Character/List/components/CharacterCard"
+import CharacterCard from "@/views/Character/List/components/CharacterCard"
 import CharacterSelector from "./components/CharacterSelector"
+import SelectedCharacterInfo from "./components/SelectedCharacterInfo"
 
 export default {
   name: "Calculator",
   components: {
+    SelectedCharacterInfo,
     CharacterSelector,
     CharacterCard,
     DataLoader,
@@ -176,8 +153,7 @@ export default {
       weaponLoaded: false,
       selectedCharacterId: '',
       selectedCharacter: null,
-      selectedCharacterLevelIndex: 0,
-      characterLevel: null,
+      selectedCharacterLevelIndex: "0",
       characterCharacteristics: [],
       calculatedCharacteristics: {},
       selectedWeaponId: 0,
@@ -211,6 +187,19 @@ export default {
     },
     characterWeapons() {
       return this.weapons.filter(weapon => weapon.weapon_type.slug === this.selectedCharacter.weapon_type.slug)
+    },
+    characterLevel() {
+      return this.selectedCharacter?.character_levels && (this.selectedCharacterLevelIndex !== undefined)
+          ? this.selectedCharacter.character_levels[this.selectedCharacterLevelIndex]
+          : null
+    }
+  },
+  watch: {
+    characterLevel: {
+      handler() {
+        this.getSelectedCharacterLevel()
+      },
+      deep: true
     }
   },
   methods: {
@@ -262,7 +251,7 @@ export default {
     },
     updateSelectedCharacter() {
       this.selectedCharacter = this.characters.find(character => character.id === this.selectedCharacterId)
-      this.selectedCharacterLevelIndex = 0
+      this.selectedCharacterLevelIndex = "0"
       this.getSelectedCharacterLevel()
 
       if (!this.findWeaponByCurrenCharacter()) {
@@ -282,8 +271,10 @@ export default {
       this.selectedWeaponLevelIndex = 0
       this.getSelectedWeaponLevel()
     },
+    setSelectedCharacterLevel(index) {
+      this.selectedCharacterLevelIndex = index
+    },
     getSelectedCharacterLevel() {
-      this.characterLevel = this.selectedCharacter.character_levels[this.selectedCharacterLevelIndex]
       if (this.characterLevel?.characteristics) {
         this.characterCharacteristics = this.characterLevel.characteristics
         this.calculateCharacteristics()
@@ -413,7 +404,7 @@ export default {
           : null
     },
     openCharacterSelector() {
-      this.showCharacterSelectorModal = true
+      this.showCharacterSelectorModal = !this.showCharacterSelectorModal
       this.setModalPositions()
     },
     setModalPositions() {
