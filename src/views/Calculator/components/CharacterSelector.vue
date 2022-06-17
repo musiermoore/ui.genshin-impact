@@ -3,15 +3,15 @@
     <div class="selector-characters" v-for="character in characters" :key="character.id">
       <CharacterCard
           :character="character"
-          @click="selectCharacter(character)"
           :pointer="true"
+          @click="selectCharacter(character)"
       />
     </div>
   </div>
 </template>
 
 <script>
-import CharacterCard from "../../Character/List/components/CharacterCard";
+import CharacterCard from "@/views/Character/List/components/CharacterCard"
 export default {
   name: "CharacterSelector",
   components: {
@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     selectCharacter(character) {
-      console.log(character);
       this.$emit('selectCharacter', character.id)
     }
   }
