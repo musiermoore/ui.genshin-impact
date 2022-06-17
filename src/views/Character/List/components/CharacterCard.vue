@@ -1,6 +1,6 @@
 <template>
-  <div class="character-card">
-    <div :class="['character-image-block']" :style="styles">
+  <div class="character-card" :style="styles">
+    <div :class="['character-image-block']">
       <img
           :src="getCharacterImage(character)"
           :alt="character ? character.name : ''"
@@ -52,6 +52,10 @@ export default {
 </script>
 
 <style scoped>
+.character-card {
+  display: inline-block;
+}
+
 .character-image-block {
   display: flex;
   justify-content: center;
