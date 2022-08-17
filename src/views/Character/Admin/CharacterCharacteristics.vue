@@ -31,11 +31,11 @@
         <h3>Добавить/изменить характеристику:</h3>
         <form @submit.prevent="createCharacteristic">
           <div class="mb-3">
-            <label for="stars" class="form-label">Характерестика:</label>
+            <label for="characteristic" class="form-label">Характерестика:</label>
             <select
                 class="form-select"
                 name="characteristic_id"
-                id="stars"
+                id="characteristic"
                 v-model="characteristicSaveData.characteristic_id"
                 @change="fillValue()"
                 required

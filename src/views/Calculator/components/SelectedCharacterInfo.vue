@@ -8,7 +8,7 @@
         Элемент: {{ selectedCharacter.element.element }}
       </div>
       <div>
-        Редкость: {{ selectedCharacter.star }}
+        Редкость: {{ selectedCharacter.rarity }}
       </div>
       <div>
         Тип оружия: {{ selectedCharacter.weapon_type.type }}

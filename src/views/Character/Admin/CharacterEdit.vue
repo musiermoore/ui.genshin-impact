@@ -13,17 +13,17 @@
           <small>Оставить пустым или имя персонажа на английском</small>
         </div>
         <div class="mb-3">
-          <label for="stars" class="form-label">Редкость:</label>
+          <label for="rarities" class="form-label">Редкость:</label>
           <select
               class="form-select"
-              name="star_id"
-              id="stars"
-              v-model="characterData.star_id"
+              name="rarity_id"
+              id="rarities"
+              v-model="characterData.rarity_id"
               required
           >
             <option value="" disabled selected>Выберите звездочку</option>
-            <option v-for="star in stars" :key="star.id" :value="star.star">
-              {{ star.star }}
+            <option v-for="rarity in rarities" :key="rarity.id" :value="rarity.rarity">
+              {{ rarity.rarity }}
             </option>
           </select>
         </div>
@@ -32,7 +32,7 @@
           <label for="elements" class="form-label">Стихия:</label>
           <select
               class="form-select"
-              name="star_id"
+              name="rarity_id"
               id="elements"
               v-model="characterData.element_id"
               required
@@ -45,7 +45,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="stars" class="form-label">Тип оружия:</label>
+          <label for="rarities" class="form-label">Тип оружия:</label>
           <select
               class="form-select"
               name="weapon_type_id"
@@ -135,13 +135,13 @@ export default {
     return {
       characterData: {
         name: '',
-        star_id: '',
+        rarity_id: '',
         element_id: '',
         weapon_type_id: '',
         image: '',
       },
       character: {},
-      stars: [],
+      rarities: [],
       elements: [],
       weaponTypes: [],
       showDeleteModal: false,
@@ -185,7 +185,7 @@ export default {
             if (response.status === 200) {
               const data = response.data.data
 
-              this.stars = data.stars
+              this.rarities = data.rarities
               this.weaponTypes = data.weapon_types
               this.elements = data.elements
 
@@ -194,7 +194,7 @@ export default {
               this.characterData = {
                 name: this.character.name,
                 slug: this.character.slug,
-                star_id: this.character.star_id,
+                rarity_id: this.character.rarity_id,
                 element_id: this.character.element_id,
                 weapon_type_id: this.character.weapon_type_id,
                 image_path: this.character.image
