@@ -63,7 +63,7 @@
                         Имя: {{ selectedWeapon.name }}
                       </div>
                       <div>
-                        Редкость: {{ selectedWeapon.star.star }}
+                        Редкость: {{ selectedWeapon.rarity.rarity }}
                       </div>
                       <div>
                         Тип оружия: {{ selectedWeapon.weapon_type.type }}
@@ -97,6 +97,8 @@
             </div>
           </div>
           <div v-if="selectedCharacter" class="character-characteristics">
+            <SelectedArtifactsInfo />
+
             <h4>Характеристики</h4>
             <div v-if="calculatedCharacteristics">
               <table class="table table-strip">
@@ -123,7 +125,7 @@
               </table>
             </div>
           </div>
-      </div>
+        </div>
       </form>
     </div>
     <DataLoader v-else />
@@ -131,12 +133,13 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import Layout from "@/components/Layout"
 import DataLoader from "@/components/Loaders/DataLoader"
-import _ from 'lodash'
 import CharacterCard from "@/views/Character/List/components/CharacterCard"
 import CharacterSelector from "./components/CharacterSelector"
 import SelectedCharacterInfo from "./components/SelectedCharacterInfo"
+import SelectedArtifactsInfo from "./components/SelectedArtifactsInfo"
 
 export default {
   name: "Calculator",
@@ -145,7 +148,8 @@ export default {
     CharacterSelector,
     CharacterCard,
     DataLoader,
-    Layout
+    Layout,
+    SelectedArtifactsInfo
   },
   data() {
     return {
@@ -244,7 +248,6 @@ export default {
           })
     },
     updateSelectedCharacterId(characterId) {
-      console.log(characterId);
       this.selectedCharacterId = characterId
       this.showCharacterSelectorModal = false
       this.updateSelectedCharacter()
