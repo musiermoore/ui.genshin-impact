@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>Артефакты</h4>
+    <h4>Артефакты (в разработке)</h4>
     <div class="artifacts">
       <div v-for="artifactType in artifactTypes" :key="artifactType.slug">
         <SelectedArtifact
@@ -15,7 +15,7 @@
 import SelectedArtifact from "./SelectedArtifact";
 
 export default {
-  name: "SelectedArtifactsInfo",
+  name: "SelectedArtifacts",
   components: {
     SelectedArtifact,
   },
