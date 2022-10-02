@@ -1,8 +1,7 @@
 <template>
-  <div>
+  <div class="section-content">
     <div class="selected-character">
       <CharacterCard
-          ref="selected_character"
           :character="selectedCalculatorCharacter"
       />
 
@@ -36,10 +35,10 @@
       </div>
     </div>
 
-    <h5>Список персонажей:</h5>
-    <CharacterList
-
-    />
+    <div class="section-content-list">
+      <h5>Список персонажей:</h5>
+      <CharacterList />
+    </div>
   </div>
 </template>
 
