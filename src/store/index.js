@@ -1,6 +1,8 @@
-import {
-    createStore
-} from 'vuex'
+import { createStore } from 'vuex'
+
+import getBaseWeaponInformation from "@/mixins/Calculator/getBaseWeaponInformation"
+import getBaseCharacterInformation from "@/mixins/Calculator/getBaseCharacterInformation"
+import getCalculatorInformation from "@/mixins/Calculator/getCalculatorInformation"
 
 const store = createStore({
     state () {
@@ -9,7 +11,11 @@ const store = createStore({
             mainLoaded: false,
             calculatorCharacters: {},
             calculatorCharacteristics: {},
-            calculatorWeapons: []
+            calculatorWeapons: [],
+            selectedCalculatorWeapon: getBaseWeaponInformation.methods.getBaseWeapon(),
+            selectedCalculatorWeaponLevel: 0,
+            selectedCalculatorCharacter: getBaseCharacterInformation.methods.getBaseCharacter(),
+            selectedCalculatorCharacterLevel: 0
         }
     },
     mutations: {
@@ -27,6 +33,22 @@ const store = createStore({
         },
         calculatorWeapons (state, weapons) {
             state.calculatorWeapons = weapons
+        },
+        selectedCalculatorCharacter (state, character) {
+            state.selectedCalculatorCharacter = character
+        },
+        selectedCalculatorCharacterLevel (state, level) {
+            state.selectedCalculatorCharacterLevel = level
+
+            getCalculatorInformation.methods.setCharacterLevelToSelectedCharacter()
+        },
+        selectedCalculatorWeapon (state, weapon) {
+            state.selectedCalculatorWeapon = weapon
+        },
+        selectedCalculatorWeaponLevel (state, level) {
+            state.selectedCalculatorWeaponLevel = level
+
+            getCalculatorInformation.methods.setWeaponLevelToSelectedWeapon()
         }
     },
     getters: {
@@ -44,6 +66,18 @@ const store = createStore({
         },
         calculatorWeapons (state) {
             return state.calculatorWeapons
+        },
+        selectedCalculatorCharacter (state) {
+            return state.selectedCalculatorCharacter
+        },
+        selectedCalculatorCharacterLevel (state) {
+            return state.selectedCalculatorCharacterLevel
+        },
+        selectedCalculatorWeapon (state) {
+            return state.selectedCalculatorWeapon
+        },
+        selectedCalculatorWeaponLevel (state) {
+            return state.selectedCalculatorWeaponLevel
         }
     }
 })
