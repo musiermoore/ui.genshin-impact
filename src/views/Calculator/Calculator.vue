@@ -58,9 +58,6 @@
     <CalculatorSelector
         v-show="showCalculatorSelector"
         :tab="calculatorSelectorTab"
-        :character="character"
-        :weapon="weapon"
-        :artifacts="artifacts"
         @close-calculator-selector="changeCalculatorSelectorVisible(false)"
     />
   </Layout>
@@ -91,7 +88,6 @@ export default {
     return {
       loaded: false,
       weaponLoaded: false,
-      weapon: null,
       artifacts: {},
       calculatedCharacteristics: {},
       showCalculatorSelector: false,
@@ -120,7 +116,7 @@ export default {
     character() {
       return this.$store.getters.selectedCalculatorCharacter
     },
-    weaponT() {
+    weapon() {
       return this.$store.getters.selectedCalculatorWeapon
     }
   },
@@ -142,13 +138,6 @@ export default {
     resetCalculatorCharacter() {
       this.$store.commit('selectedCalculatorCharacter', this.getBaseCharacter())
       this.$store.commit('selectedCalculatorCharacterLevel', 0)
-    },
-    updateWeapon(weapon) {
-      if (weapon?.id) {
-        this.weapon = weapon
-      } else {
-        this.weapon = null
-      }
     },
     getCharacters() {
       if (this.characters?.length) {
@@ -220,9 +209,9 @@ export default {
         })
 
         // a weapon
-        if (this.weapon?.sub_stat?.slug === percentCharacteristicName && this.weapon.selected_level_characteristics?.sub_stat?.value) {
+        if (this.weapon?.sub_stat?.slug === percentCharacteristicName && this.weapon.selected_characteristics?.sub_stat?.value) {
           const subStat = (
-              this.weapon.selected_level_characteristics.sub_stat.value / 100
+              this.weapon.selected_characteristics.sub_stat.value / 100
           ).toFixed(2)
 
           additionalValue += Number(Math.floor(baseValue * subStat))
@@ -233,8 +222,8 @@ export default {
           additionalValue += Number(Math.floor(baseValue * (characteristic['value'] / 100)).toFixed(2))
         }
       } else {
-        if (this.weapon?.sub_stat?.slug === characteristicName && this.weapon.selected_level_characteristics?.sub_stat?.value) {
-          const subStat = this.weapon.selected_level_characteristics.sub_stat.value
+        if (this.weapon?.sub_stat?.slug === characteristicName && this.weapon.selected_characteristics?.sub_stat?.value) {
+          const subStat = this.weapon.selected_characteristics.sub_stat.value
 
           additionalValue += Number(subStat)
         }
@@ -255,8 +244,8 @@ export default {
         : 0
     },
     getBaseCharacteristicValue(characteristicName) {
-      const weaponAtk = characteristicName === 'atk' && this.weapon?.selected_level_characteristics?.base_atk
-          ? this.weapon.selected_level_characteristics.base_atk
+      const weaponAtk = characteristicName === 'atk' && this.weapon?.selected_characteristics?.base_atk
+          ? this.weapon.selected_characteristics.base_atk
           : 0
 
       const characteristicValue = this.findCharacterCharacteristic(characteristicName)
