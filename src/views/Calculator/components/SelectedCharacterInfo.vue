@@ -1,31 +1,44 @@
 <template>
-  <div class="d-flex flex-wrap mb-2" style="gap: 10px 10px" v-if="selectedCharacter">
+  <div class="d-flex flex-wrap flex-column" style="gap: 10px 10px">
     <div>
+      <h4>
+        Персонаж:
+      </h4>
       <div>
-        Имя: {{ selectedCharacter.name }}
+        <CharacterCard
+            ref="selected_character"
+            :character="character"
+            :pointer="true"
+            @click="openCalculatorSelector"
+        />
+      </div>
+    </div>
+
+    <div v-if="character.id">
+      <div>
+        Имя: {{ character.name }}
       </div>
       <div>
-        Элемент: {{ selectedCharacter.element.element }}
+        Элемент: {{ character.element.element }}
       </div>
       <div>
-        Редкость: {{ selectedCharacter.rarity }}
+        Редкость: {{ character.rarity }}
       </div>
       <div>
-        Тип оружия: {{ selectedCharacter.weapon_type.type }}
+        Тип оружия: {{ character.weapon_type.type }}
       </div>
-      <div class="mb-3 range" v-if="selectedCharacter && selectedCharacter.character_levels">
+      <div class="mb-3 range" v-if="character && character.character_levels">
         <label for="character-level" class="form-label">
-          Уровень: {{ characterLevel.level }}/{{ characterLevel.max_level }}
+          Уровень: {{ character.character_level.level }}/{{ character.character_level.max_level }}
         </label>
         <input
             type="range"
             id="character-level"
             class="form-range"
-            :disabled="!selectedCharacter"
-            v-model="levelIndex"
-            @input="setSelectedCharacterLevel"
+            :disabled="!character"
+            v-model="selectedCalculatorCharacterLevel"
             min="0"
-            :max="selectedCharacter.character_levels.length - 1"
+            :max="character.character_levels.length - 1"
         >
       </div>
     </div>
@@ -33,34 +46,53 @@
 </template>
 
 <script>
+import CharacterCard from "@/components/Character/CharacterCard"
+
 export default {
   name: "SelectedCharacterInfo",
-  props: {
-    selectedCharacter: Object,
-    characterLevel: Object,
-    selectedCharacterLevelIndex: {
-      type: String,
-      default: "0"
-    }
+  components: {
+    CharacterCard,
   },
   data() {
     return {
-      levelIndex: 0
-    }
-  },
-  watch: {
-    selectedCharacterLevelIndex: {
-      handler() {
-        this.levelIndex = this.selectedCharacterLevelIndex
-            ? this.selectedCharacterLevelIndex
-            : 0
+      selectorPositions: {
+        right: '100px',
+        top: null
       }
     }
   },
-  methods: {
-    setSelectedCharacterLevel() {
-      this.$emit('set-selected-character-level', this.levelIndex)
+  mounted() {
+
+  },
+  computed: {
+    characters() {
+      return this.$store.getters.calculatorCharacters
+    },
+    character() {
+      return this.$store.getters.selectedCalculatorCharacter
+    },
+    selectedCalculatorCharacterLevel: {
+      get () {
+        return this.$store.getters.selectedCalculatorCharacterLevel
+      },
+      set (level) {
+        this.$store.commit('selectedCalculatorCharacterLevel', level)
+      }
     }
+  },
+  watch: {
+    character: {
+      handler() {
+
+      },
+      deep: true
+    }
+  },
+  methods: {
+    openCalculatorSelector() {
+      this.$emit('change-calculator-selector-visible', true)
+      this.$emit('change-calculator-selector-tab', 'character')
+    },
   }
 }
 </script>
