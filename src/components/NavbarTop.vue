@@ -65,6 +65,6 @@ nav.navbar-top {
   border-bottom: 2px solid #fff;
   position: fixed;
   background-color: var(--main-color);
-  z-index: 10001;
+  z-index: 11;
 }
 </style>

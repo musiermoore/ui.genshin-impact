@@ -10,7 +10,7 @@ export default {
 
 <style scoped>
 .loader {
-  color: #666;
+  color: #fff;
   font-size: 12px;
   margin: 50px auto;
   width: 1em;

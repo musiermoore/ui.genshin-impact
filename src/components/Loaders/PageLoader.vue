@@ -19,8 +19,8 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 10000001;
-  background: var(--background-color);
+  z-index: 100;
+  background: transparent;
 }
 
 .loader {
