@@ -8,7 +8,6 @@
         />
       </div>
   </div>
-
 </template>
 
 <script>
@@ -34,6 +33,9 @@ export default {
     },
     selectedCharacter() {
       return this.$store.getters.selectedCalculatorCharacter
+    },
+    selectedWeapon() {
+      return this.$store.getters.selectedCalculatorWeapon
     }
   },
   methods: {
@@ -45,6 +47,10 @@ export default {
         }
 
         this.$store.commit('selectedCalculatorCharacter', character)
+
+        if (this.selectedWeapon?.id && this.selectedWeapon.weapon_type.slug !== character.weapon_type.slug) {
+          this.$store.commit('selectedCalculatorWeapon', null)
+        }
       }
     }
   }
@@ -52,10 +58,5 @@ export default {
 </script>
 
 <style scoped>
-.character-list {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+
 </style>
