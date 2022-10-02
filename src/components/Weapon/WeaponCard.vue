@@ -4,6 +4,7 @@
       <img
           :src="getWeaponImage(weapon)"
           :alt="weapon.name"
+          :title="weapon.name"
           class="weapon-card-image"
           style="max-height: 200px; width: 200px"
       >
