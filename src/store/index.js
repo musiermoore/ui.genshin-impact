@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 
 import getBaseWeaponInformation from "@/mixins/Calculator/getBaseWeaponInformation"
 import getBaseCharacterInformation from "@/mixins/Calculator/getBaseCharacterInformation"
-import getCalculatorInformation from "@/mixins/Calculator/getCalculatorInformation"
+import calculatorInformation from "@/mixins/Calculator/calculatorInformation"
 
 const store = createStore({
     state () {
@@ -40,7 +40,7 @@ const store = createStore({
         selectedCalculatorCharacterLevel (state, level) {
             state.selectedCalculatorCharacterLevel = level
 
-            getCalculatorInformation.methods.setCharacterLevelToSelectedCharacter()
+            calculatorInformation.methods.setCharacterLevelToSelectedCharacter()
         },
         selectedCalculatorWeapon (state, weapon) {
             state.selectedCalculatorWeapon = weapon
@@ -48,7 +48,7 @@ const store = createStore({
         selectedCalculatorWeaponLevel (state, level) {
             state.selectedCalculatorWeaponLevel = level
 
-            getCalculatorInformation.methods.setWeaponLevelToSelectedWeapon()
+            calculatorInformation.methods.setWeaponLevelToSelectedWeapon()
         }
     },
     getters: {
