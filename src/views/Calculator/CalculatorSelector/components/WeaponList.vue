@@ -1,53 +1,53 @@
 <template>
-  <div>
-    <h5>Список персонажей:</h5>
-    <div class="character-list">
-      <div v-for="character in characters" v-bind:key="character.id" class="character-item">
-        <CharacterCard
-            :character="character"
-            :pointer="true"
-            @click="selectCharacter(character)"
-        />
-      </div>
+  <div class="calculator-list weapon-list">
+    <div v-for="weapon in weapons" v-bind:key="weapon.id" class="weapon-item">
+      <WeaponCard
+          :weapon="weapon"
+          :pointer="true"
+          @click="selectWeapon(weapon)"
+      />
     </div>
   </div>
-
 </template>
 
 <script>
-import CharacterCard from "@/components/Character/CharacterCard"
+import WeaponCard from "@/components/Weapon/WeaponCard"
 import calculatorInformation from "@/mixins/Calculator/calculatorInformation";
 
 export default {
-  name: "CharacterList",
+  name: "WeaponList",
   components: {
-    CharacterCard
+    WeaponCard
   },
   mixins: [
     calculatorInformation
   ],
   data() {
     return {
-      selectedCharacterLevelIndex: 0,
+
     }
   },
   computed: {
-    characters() {
-      return this.$store.getters.calculatorCharacters
-    },
     selectedCharacter() {
       return this.$store.getters.selectedCalculatorCharacter
+    },
+    selectedWeapon() {
+      return this.$store.getters.selectedCalculatorWeapon
+    },
+    weapons() {
+      return this.$store.getters.calculatorWeapons
+          .filter(weapon => !this.selectedCharacter?.id || (weapon.weapon_type.slug === this.selectedCharacter.weapon_type.slug))
     }
   },
   methods: {
-    selectCharacter(character) {
-      if (character) {
-        if (this.selectedCharacter?.id !== character?.id) {
-          this.$store.commit('selectedCalculatorCharacterLevel', 0)
-          character.character_level = this.getSelectedCharacterLevel(character, 0)
+    selectWeapon(weapon) {
+      if (weapon) {
+        if (this.selectedWeapon?.id !== weapon?.id) {
+          this.$store.commit('selectedCalculatorWeaponLevel', 0)
+          weapon.selected_characteristics = this.getSelectedWeaponLevel(weapon, 0)
         }
 
-        this.$store.commit('selectedCalculatorCharacter', character)
+        this.$store.commit('selectedCalculatorWeapon', weapon)
       }
     }
   }
@@ -55,10 +55,5 @@ export default {
 </script>
 
 <style scoped>
-.character-list {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+
 </style>
