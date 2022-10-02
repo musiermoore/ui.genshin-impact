@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <div>
+  <div class="section-content">
+    <div class="selected-weapon">
       <WeaponCard
-          :weapon="{ name: null }"
+          :weapon="selectedCalculatorWeapon"
       />
-    </div>
 
-    <div v-if="selectedCalculatorWeapon && selectedCalculatorWeapon.id" class="d-flex flex-wrap" style="gap: 10px 10px">
-      <div v-if="selectedCalculatorWeapon">
+      <div v-if="selectedCalculatorWeapon && selectedCalculatorWeapon.id">
         <div>
           <div>
             Имя: {{ selectedCalculatorWeapon.name }}
@@ -20,19 +18,19 @@
           </div>
           <div>
             Базовая атака:
-            {{ selectedCalculatorWeapon.selected_level_characteristics?.base_atk ? selectedCalculatorWeapon.selected_level_characteristics?.base_atk : 0 }}
+            {{ selectedCalculatorWeapon.selected_characteristics?.base_atk ? selectedCalculatorWeapon.selected_characteristics?.base_atk : 0 }}
           </div>
           <div>
             {{ selectedCalculatorWeapon.sub_stat.name }}:
             {{
-              selectedCalculatorWeapon.selected_level_characteristics?.sub_stat?.value
-                  ? selectedCalculatorWeapon.selected_level_characteristics.sub_stat.value
+              selectedCalculatorWeapon.selected_characteristics?.sub_stat?.value
+                  ? selectedCalculatorWeapon.selected_characteristics.sub_stat.value
                   : 0
             }}{{ selectedCalculatorWeapon.sub_stat?.in_percent ? '%' : '' }}
           </div>
-          <div class="mb-3 range" v-if="selectedCalculatorWeapon">
+          <div class="mb-3 range" v-if="selectedCalculatorWeapon.selected_characteristics">
             <label for="selected-character" class="form-label">
-              Уровень: {{ selectedCalculatorWeapon.selected_level_characteristics.level.level }}/{{ selectedCalculatorWeapon.selected_level_characteristics.ascension.max_level }}
+              Уровень: {{ selectedCalculatorWeapon.selected_characteristics.level.level }}/{{ selectedCalculatorWeapon.selected_characteristics.ascension.max_level }}
             </label>
             <input
                 type="range"
@@ -46,6 +44,11 @@
         </div>
       </div>
     </div>
+
+    <div class="section-content-list">
+      <h5>Список оружия:</h5>
+      <WeaponList />
+    </div>
   </div>
 </template>
 
@@ -53,10 +56,12 @@
 import WeaponCard from "@/components/Weapon/WeaponCard"
 import getBaseWeaponInformation from "@/mixins/Calculator/getBaseWeaponInformation"
 import calculatorInformation from "@/mixins/Calculator/calculatorInformation"
+import WeaponList from "./WeaponList";
 
 export default {
   name: "WeaponSection",
   components: {
+    WeaponList,
     WeaponCard
   },
   mixins: [
@@ -85,5 +90,9 @@ export default {
 </script>
 
 <style scoped>
-
+.selected-weapon {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 </style>
