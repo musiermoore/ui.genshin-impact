@@ -136,7 +136,7 @@
           </div>
 
           <div class="mb-3" v-if="weaponData.sub_stat && weaponData.characteristics">
-            <table class="table">
+            <table class="table text-white">
               <thead>
               <tr>
                 <th>Уровень</th>

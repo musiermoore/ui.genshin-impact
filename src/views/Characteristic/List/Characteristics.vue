@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <table class="table table-borderless table-bordered my-3" v-if="loaded">
+    <table class="table table-borderless table-bordered my-3 text-white" v-if="loaded">
       <thead>
       <tr>
         <th>Название</th>

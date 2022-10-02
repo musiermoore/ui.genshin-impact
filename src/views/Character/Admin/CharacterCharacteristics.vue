@@ -8,7 +8,7 @@
         >{{ characterLevel.character.name }}</router-link>
         - {{ characterLevel.level.level }}/{{ characterLevel.ascension.max_level }}
       </h1>
-      <table class="table table-borderless table-bordered characteristics mb-3">
+      <table class="table table-borderless table-bordered characteristics mb-3 text-white">
         <thead>
           <tr>
             <th>Характеристика</th>

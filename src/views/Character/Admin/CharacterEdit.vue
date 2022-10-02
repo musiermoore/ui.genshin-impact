@@ -278,13 +278,13 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 0 6px 6px 0;
-  border: 1px solid #666;
+  border: 1px solid #fff;
   border-radius: 15px;
   width: 80px;
   height: 40px;
   cursor: pointer;
   text-decoration: none;
-  color: rgba(3, 56, 141, 0.8);
+  color: #fff;
 }
 .character-levels .character-level:hover {
   background-color: #0d6efd;
