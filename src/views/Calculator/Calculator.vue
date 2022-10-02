@@ -5,122 +5,47 @@
         <div class="calculator">
           <div class="character-info">
             <div class="mb-3">
-              <h4>
-                <label for="selected-character" class="form-label">Персонаж:</label>
-              </h4>
-              <div>
-                <CharacterCard
-                    ref="selected_character"
-                    :character="selectedCharacter"
-                    :pointer="true"
-                    @click="openCharacterSelector"
+                <SelectedCharacterInfo
+                  @change-calculator-selector-visible="changeCalculatorSelectorVisible($event)"
+                  @change-calculator-selector-tab="changeCalculatorSelectorTab($event)"
                 />
-                <CharacterSelector
-                    ref="character_selector"
-                    :show="showCharacterSelectorModal"
-                    :positions="selectorPositions"
-                    @selectCharacter="updateSelectedCharacterId($event)"
-                />
-              </div>
             </div>
-            <div v-if="selectedCharacterId">
-              <SelectedCharacterInfo
-                  :selectedCharacter="selectedCharacter"
-                  :characterLevel="characterLevel"
-                  :selectedCharacterLevelIndex="selectedCharacterLevelIndex"
-                  @set-selected-character-level="setSelectedCharacterLevel($event)"
+            <div>
+              <SelectedWeaponInfo
+                @change-calculator-selector-visible="changeCalculatorSelectorVisible($event)"
+                @change-calculator-selector-tab="changeCalculatorSelectorTab($event)"
               />
-              <div class="d-flex flex-column">
-                <h4>Оружие:</h4>
-                <select
-                    name="selected-weapon"
-                    id="selected-weapon"
-                    class="form-control mb-2"
-                    v-model="selectedWeaponId"
-                    @change="updateSelectedWeapon"
-                >
-                  <option value="0">Без оружия</option>
-                  <option
-                      v-for="weapon in characterWeapons"
-                      :key="weapon.id"
-                      :value="weapon.id"
-                  >
-                    {{ weapon.name }}
-                  </option>
-                </select>
-                <div v-if="selectedWeaponId" class="d-flex flex-wrap" style="gap: 10px 10px">
-                  <div v-if="selectedWeapon && selectedWeaponId !== 0" class="d-flex justify-content-center list-item-image my-2">
-                    <img
-                        :src="getWeaponImage(selectedWeapon)"
-                        :alt="selectedWeapon.name"
-                        class=""
-                        style="max-height: 200px; width: 200px"
-                    >
-                  </div>
-                  <div v-if="selectedWeapon && selectedWeaponId !== 0">
-                    <div>
-                      <div>
-                        Имя: {{ selectedWeapon.name }}
-                      </div>
-                      <div>
-                        Редкость: {{ selectedWeapon.rarity.rarity }}
-                      </div>
-                      <div>
-                        Тип оружия: {{ selectedWeapon.weapon_type.type }}
-                      </div>
-                      <div>
-                        Базовая атака:
-                        {{ selectedWeaponCharacteristics?.base_atk ? selectedWeaponCharacteristics?.base_atk : 0 }}
-                      </div>
-                      <div>
-                        {{ selectedWeapon.sub_stat.name }}:
-                        {{ selectedWeaponCharacteristics?.sub_stat?.value ? selectedWeaponCharacteristics.sub_stat.value : 0 }}
-                      </div>
-                      <div class="mb-3 range" v-if="selectedWeapon">
-                        <label for="selected-character" class="form-label">
-                          Уровень: {{ selectedWeaponCharacteristics.level.level }}/{{ selectedWeaponCharacteristics.ascension.max_level }}
-                        </label>
-                        <input
-                            type="range"
-                            class="form-range"
-                            :disabled="!selectedWeapon"
-                            v-model="selectedWeaponLevelIndex"
-                            @input="getSelectedWeaponLevel"
-                            min="0"
-                            :max="selectedWeapon.characteristics.length - 1"
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+              <SelectedArtifacts
+                  @change-calculator-selector-visible="changeCalculatorSelectorVisible($event)"
+                  @change-calculator-selector-tab="changeCalculatorSelectorTab($event)"
+              />
             </div>
           </div>
-          <div v-if="selectedCharacter" class="character-characteristics">
-            <SelectedArtifactsInfo />
 
+          <div v-if="character && character.id" class="character-characteristics">
             <h4>Характеристики</h4>
             <div v-if="calculatedCharacteristics">
               <table class="table table-strip">
                 <thead>
-                  <tr>
-                    <th>Название</th>
-                    <th>Значение</th>
-                  </tr>
+                <tr>
+                  <th>Название</th>
+                  <th>Значение</th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr
-                      v-for="characteristic in calculatedCharacteristics"
-                      :value="characteristic.id"
-                      :key="characteristic.id"
-                  >
-                    <td>
-                      {{ characteristic.name }}
-                    </td>
-                    <td>
-                      {{ Math.round((Number(characteristic.value) + Number.EPSILON) * 100) / 100 }}{{ characteristic.in_percent ? '%' : '' }}
-                    </td>
-                  </tr>
+                <tr
+                    v-for="characteristic in calculatedCharacteristics"
+                    :value="characteristic.id"
+                    :key="characteristic.id"
+                >
+                  <td>
+                    {{ characteristic.name }}
+                  </td>
+                  <td>
+                    {{ Math.round((Number(characteristic.value) + Number.EPSILON) * 100) / 100 }}{{ characteristic.in_percent ? '%' : '' }}
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -129,6 +54,15 @@
       </form>
     </div>
     <DataLoader v-else />
+
+    <CalculatorSelector
+        v-show="showCalculatorSelector"
+        :tab="calculatorSelectorTab"
+        :character="character"
+        :weapon="weapon"
+        :artifacts="artifacts"
+        @close-calculator-selector="changeCalculatorSelectorVisible(false)"
+    />
   </Layout>
 </template>
 
@@ -136,42 +70,36 @@
 import _ from 'lodash'
 import Layout from "@/components/Layout"
 import DataLoader from "@/components/Loaders/DataLoader"
-import CharacterCard from "@/views/Character/List/components/CharacterCard"
-import CharacterSelector from "./components/CharacterSelector"
+import CalculatorSelector from "./CalculatorSelector/CalculatorSelector"
+import getBaseCharacterInformation from "@/mixins/Calculator/getBaseCharacterInformation"
 import SelectedCharacterInfo from "./components/SelectedCharacterInfo"
-import SelectedArtifactsInfo from "./components/SelectedArtifactsInfo"
+import SelectedWeaponInfo from "./components/SelectedWeaponInfo"
+import SelectedArtifacts from "./components/SelectedArtifacts"
 
 export default {
   name: "Calculator",
+  mixins: [getBaseCharacterInformation],
   components: {
     SelectedCharacterInfo,
-    CharacterSelector,
-    CharacterCard,
+    SelectedWeaponInfo,
     DataLoader,
     Layout,
-    SelectedArtifactsInfo
+    SelectedArtifacts,
+    CalculatorSelector
   },
   data() {
     return {
       loaded: false,
       weaponLoaded: false,
-      selectedCharacterId: '',
-      selectedCharacter: null,
-      selectedCharacterLevelIndex: "0",
-      characterCharacteristics: [],
+      weapon: null,
+      artifacts: {},
       calculatedCharacteristics: {},
-      selectedWeaponId: 0,
-      selectedWeaponLevelIndex: 0,
-      selectedWeapon: {},
-      selectedWeaponCharacteristics: {},
-      selectorPositions: {
-        right: '100px',
-        top: null
-      },
-      showCharacterSelectorModal: false
+      showCalculatorSelector: false,
+      calculatorSelectorTab: 'character'
     }
   },
   mounted() {
+    this.resetCalculatorCharacter()
     this.getCharacteristics()
     this.getCharacters()
     this.getWeapons()
@@ -180,33 +108,48 @@ export default {
     characters() {
       return this.$store.getters.calculatorCharacters
     },
+    weapons() {
+      return this.$store.getters.calculatorWeapons
+    },
     defaultCharacteristics: {
       cache: false,
       get() {
         return this.$store.getters.calculatorCharacteristics
       }
     },
-    weapons() {
-      return this.$store.getters.calculatorWeapons
+    character() {
+      return this.$store.getters.selectedCalculatorCharacter
     },
-    characterWeapons() {
-      return this.weapons.filter(weapon => weapon.weapon_type.slug === this.selectedCharacter.weapon_type.slug)
-    },
-    characterLevel() {
-      return this.selectedCharacter?.character_levels && (this.selectedCharacterLevelIndex !== undefined)
-          ? this.selectedCharacter.character_levels[this.selectedCharacterLevelIndex]
-          : null
+    weaponT() {
+      return this.$store.getters.selectedCalculatorWeapon
     }
   },
   watch: {
-    characterLevel: {
+    character: {
       handler() {
-        this.getSelectedCharacterLevel()
+        this.calculateCharacteristics()
+      },
+      deep: true
+    },
+    weapon: {
+      handler() {
+        this.calculateCharacteristics()
       },
       deep: true
     }
   },
   methods: {
+    resetCalculatorCharacter() {
+      this.$store.commit('selectedCalculatorCharacter', this.getBaseCharacter())
+      this.$store.commit('selectedCalculatorCharacterLevel', 0)
+    },
+    updateWeapon(weapon) {
+      if (weapon?.id) {
+        this.weapon = weapon
+      } else {
+        this.weapon = null
+      }
+    },
     getCharacters() {
       if (this.characters?.length) {
         this.loaded = true
@@ -247,86 +190,6 @@ export default {
             }
           })
     },
-    updateSelectedCharacterId(characterId) {
-      this.selectedCharacterId = characterId
-      this.showCharacterSelectorModal = false
-      this.updateSelectedCharacter()
-    },
-    updateSelectedCharacter() {
-      this.selectedCharacter = this.characters.find(character => character.id === this.selectedCharacterId)
-      this.selectedCharacterLevelIndex = "0"
-      this.getSelectedCharacterLevel()
-
-      if (!this.findWeaponByCurrenCharacter()) {
-        this.updateSelectedWeapon()
-      }
-    },
-    findWeaponByCurrenCharacter() {
-      return this.characterWeapons.find(weapon => weapon.id === this.selectedWeaponId)
-    },
-    updateSelectedWeapon() {
-      this.selectedWeapon = this.findWeaponByCurrenCharacter()
-
-      if (!this.selectedWeapon) {
-        this.selectedWeaponId = 0
-      }
-
-      this.selectedWeaponLevelIndex = 0
-      this.getSelectedWeaponLevel()
-    },
-    setSelectedCharacterLevel(index) {
-      this.selectedCharacterLevelIndex = index
-    },
-    getSelectedCharacterLevel() {
-      if (this.characterLevel?.characteristics) {
-        this.characterCharacteristics = this.characterLevel.characteristics
-        this.calculateCharacteristics()
-      }
-    },
-    getSelectedWeaponLevel() {
-      const weaponCharacteristic = this.selectedWeapon?.characteristics
-          ? this.selectedWeapon.characteristics[this.selectedWeaponLevelIndex]
-          : null
-      if (_.isEmpty(weaponCharacteristic)) {
-        this.selectedWeaponCharacteristics = null
-      } else {
-        this.selectedWeaponCharacteristics = weaponCharacteristic
-      }
-      this.calculateCharacteristics()
-    },
-    getCharacterImage(character) {
-      const images = character.images
-
-      if (!images) {
-        return null
-      }
-
-      const mainImage = images.find(image => image.image_type.slug === 'main')
-
-      return mainImage
-          ? `${this.$storageUrl}/${mainImage.path}`
-          : null
-    },
-    getWeaponImage(weapon) {
-      if (!weapon) {
-        return null
-      }
-
-      const images = weapon.images
-
-      if (!images) {
-        return null
-      }
-
-      const mainImage = images.find(image => image.image_type.slug === 'main')
-
-      return mainImage
-          ? `${this.$storageUrl}/${mainImage.path}`
-          : null
-    },
-    getBackgroundColorByElement(element) {
-      return element.slug + '-background'
-    },
     calculateCharacteristics() {
       const calculatedCharacteristics = _.cloneDeep(this.defaultCharacteristics)
 
@@ -339,7 +202,11 @@ export default {
       this.calculatedCharacteristics = calculatedCharacteristics
     },
     calculate(characteristicName) {
-      const characteristics = this.characterLevel.characteristics
+      if (!this.character?.character_level?.characteristics) {
+        return
+      }
+
+      const characteristics = this.character.character_level.characteristics
 
       let additionalValue = Number(0.00)
 
@@ -353,23 +220,21 @@ export default {
         })
 
         // a weapon
-        if (this.selectedWeapon?.sub_stat?.slug === percentCharacteristicName && this.selectedWeaponCharacteristics?.sub_stat?.value) {
+        if (this.weapon?.sub_stat?.slug === percentCharacteristicName && this.weapon.selected_level_characteristics?.sub_stat?.value) {
           const subStat = (
-              this.selectedWeaponCharacteristics.sub_stat.value / 100
+              this.weapon.selected_level_characteristics.sub_stat.value / 100
           ).toFixed(2)
 
           additionalValue += Number(Math.floor(baseValue * subStat))
         }
 
         // a character characteristic
-        if (characteristics) {
-          if (characteristic) {
-            additionalValue += Number(Math.floor(baseValue * (characteristic['value'] / 100)).toFixed(2))
-          }
+        if (characteristic) {
+          additionalValue += Number(Math.floor(baseValue * (characteristic['value'] / 100)).toFixed(2))
         }
       } else {
-        if (this.selectedWeapon?.sub_stat?.slug === characteristicName && this.selectedWeaponCharacteristics?.sub_stat?.value) {
-          const subStat = this.selectedWeaponCharacteristics.sub_stat.value
+        if (this.weapon?.sub_stat?.slug === characteristicName && this.weapon.selected_level_characteristics?.sub_stat?.value) {
+          const subStat = this.weapon.selected_level_characteristics.sub_stat.value
 
           additionalValue += Number(subStat)
         }
@@ -378,8 +243,8 @@ export default {
       return baseValue + additionalValue
     },
     findCharacterCharacteristic(name) {
-      return this.characterCharacteristics.find(characteristic => characteristic.slug === name)?.value
-        ? this.characterCharacteristics.find(characteristic => characteristic.slug === name).value
+      return this.character.character_level.characteristics.find(characteristic => characteristic.slug === name)?.value
+        ? this.character.character_level.characteristics.find(characteristic => characteristic.slug === name).value
         : 0
     },
     findDefaultCharacterCharacteristic(name) {
@@ -390,8 +255,8 @@ export default {
         : 0
     },
     getBaseCharacteristicValue(characteristicName) {
-      const weaponAtk = characteristicName === 'atk' && this.selectedWeaponCharacteristics?.base_atk
-          ? this.selectedWeaponCharacteristics.base_atk
+      const weaponAtk = characteristicName === 'atk' && this.weapon?.selected_level_characteristics?.base_atk
+          ? this.weapon.selected_level_characteristics.base_atk
           : 0
 
       const characteristicValue = this.findCharacterCharacteristic(characteristicName)
@@ -406,17 +271,11 @@ export default {
           ? `${characteristicName}-percent`
           : null
     },
-    openCharacterSelector() {
-      this.showCharacterSelectorModal = !this.showCharacterSelectorModal
-      this.setModalPositions()
+    changeCalculatorSelectorVisible(show = false) {
+      this.showCalculatorSelector = show
     },
-    setModalPositions() {
-      const $element = this.$refs.selected_character.$el
-
-      this.selectorPositions = {
-        'left': Number($element.offsetLeft) + 'px',
-        'top': $element.offsetTop + $element.clientHeight + 25 + 'px'
-      }
+    changeCalculatorSelectorTab(tab = 'character') {
+      this.calculatorSelectorTab = tab
     }
   }
 }
@@ -437,14 +296,6 @@ export default {
 .calculator .character-characteristics {
   flex-basis: 50%;
 
-}
-
-.list-item-image {
-  width: 200px;
-  height: 200px;
-  position: relative;
-  border: 1px solid rgba(30, 30, 30, 0.5);
-  border-radius: 3px;
 }
 
 table.table {
