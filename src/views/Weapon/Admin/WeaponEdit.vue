@@ -395,11 +395,11 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1001;
+  z-index: 11;
 }
 
 .delete-modal .modal-content {
-  z-index: 1002;
+  z-index: 12;
   width: 500px;
   padding: 20px;
 }
