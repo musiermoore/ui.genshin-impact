@@ -9,7 +9,7 @@
 <script>
 import { getCurrentInstance } from "vue"
 import axios from "axios"
-import PageLoader from "./components/Loaders/PageLoader"
+import PageLoader from "@/components/Loaders/PageLoader"
 
 export default {
   name: 'App',

@@ -273,6 +273,12 @@ export default {
     },
     changeCalculatorSelectorVisible(show = false) {
       this.showCalculatorSelector = show
+
+      if (show) {
+        this.fixBody()
+      } else {
+        this.unfixBody()
+      }
     },
     changeCalculatorSelectorTab(tab = 'character') {
       this.calculatorSelectorTab = tab
