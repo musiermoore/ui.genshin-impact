@@ -114,6 +114,8 @@ export default {
   background-color: var(--main-color);
   z-index: 20;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .calculator-selector .selectors .tabs {
@@ -157,17 +159,30 @@ export default {
 }
 .calculator-selector .selectors .sections {
   display: flex;
-  height: 100%;
   overflow: hidden;
 }
 .calculator-selector .selectors .sections .section-body  {
-  padding: 5px 10px;
+  padding: 0 10px;
 }
 </style>
 <style>
+.calculator-selector .section-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.calculator-selector .section-content-list {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 .calculator-selector .calculator-list {
-  max-height: 100%;
-  /*height: 100%;*/
-  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-right: 5px;
+  overflow-y: auto;
 }
 </style>
