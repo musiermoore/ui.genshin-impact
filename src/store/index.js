@@ -43,7 +43,9 @@ const store = createStore({
             calculatorInformation.methods.setCharacterLevelToSelectedCharacter()
         },
         selectedCalculatorWeapon (state, weapon) {
-            state.selectedCalculatorWeapon = weapon
+            state.selectedCalculatorWeapon = weapon?.id
+                ? weapon
+                : getBaseWeaponInformation.methods.getBaseWeapon()
         },
         selectedCalculatorWeaponLevel (state, level) {
             state.selectedCalculatorWeaponLevel = level
