@@ -4,42 +4,42 @@
       <h4>
         Персонаж:
       </h4>
-      <div>
+      <div class="d-flex flex-wrap gap-2">
         <CharacterCard
             ref="selected_character"
             :character="character"
             :pointer="true"
             @click="openCalculatorSelector"
         />
-      </div>
-    </div>
 
-    <div v-if="character.id">
-      <div>
-        Имя: {{ character.name }}
-      </div>
-      <div>
-        Элемент: {{ character.element.element }}
-      </div>
-      <div>
-        Редкость: {{ character.rarity }}
-      </div>
-      <div>
-        Тип оружия: {{ character.weapon_type.type }}
-      </div>
-      <div class="mb-3 range" v-if="character && character.character_levels">
-        <label for="character-level" class="form-label">
-          Уровень: {{ character.character_level.level }}/{{ character.character_level.max_level }}
-        </label>
-        <input
-            type="range"
-            id="character-level"
-            class="form-range"
-            :disabled="!character"
-            v-model="selectedCalculatorCharacterLevel"
-            min="0"
-            :max="character.character_levels.length - 1"
-        >
+        <div v-if="character.id">
+          <div>
+            Имя: {{ character.name }}
+          </div>
+          <div>
+            Элемент: {{ character.element.element }}
+          </div>
+          <div>
+            Редкость: {{ character.rarity }}
+          </div>
+          <div>
+            Тип оружия: {{ character.weapon_type.type }}
+          </div>
+          <div class="mb-3 range" v-if="character && character.character_levels">
+            <label for="character-level" class="form-label">
+              Уровень: {{ character.character_level.level }}/{{ character.character_level.max_level }}
+            </label>
+            <input
+                type="range"
+                id="character-level"
+                class="form-range"
+                :disabled="!character"
+                v-model="selectedCalculatorCharacterLevel"
+                min="0"
+                :max="character.character_levels.length - 1"
+            >
+          </div>
+        </div>
       </div>
     </div>
   </div>
