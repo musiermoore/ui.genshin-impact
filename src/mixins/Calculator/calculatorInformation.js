@@ -24,14 +24,14 @@ export default {
             if (weapon) {
                 const selectedWeaponLevel = store.getters.selectedCalculatorWeaponLevel
 
-                weapon.selected_level_characteristics = this.getSelectedWeaponLevel(weapon, selectedWeaponLevel)
+                weapon.selected_characteristics = this.getSelectedWeaponLevel(weapon, selectedWeaponLevel)
             }
 
             store.commit('selectedCalculatorWeapon', weapon)
         },
-        getSelectedWeaponLevel(character, level = 0) {
-            return character?.character_levels?.length > 0 && character?.character_levels[level]
-                ? character.character_levels[level]
+        getSelectedWeaponLevel(weapon, level = 0) {
+            return weapon?.characteristics?.length > 0 && weapon?.characteristics[level]
+                ? weapon.characteristics[level]
                 : null
         }
     }

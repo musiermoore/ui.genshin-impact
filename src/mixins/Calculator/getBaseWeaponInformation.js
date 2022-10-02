@@ -21,7 +21,7 @@ export default {
                     type: '-',
                     slug: '-'
                 },
-                selected_level_characteristics: {}
+                selected_characteristics: {}
             }
         }
     }
