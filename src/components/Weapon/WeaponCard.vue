@@ -44,7 +44,7 @@ export default {
 
       return mainImage
           ? `${this.$storageUrl}/${mainImage.path}`
-          : `${this.$storageUrl}/images/shadow_weapon.png`
+          : `${this.$publicAssetsUrl}/images/shadow_weapon.png`
     }
   }
 }

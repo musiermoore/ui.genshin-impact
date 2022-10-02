@@ -42,7 +42,7 @@ export default {
 
       return mainImage
           ? `${this.$storageUrl}/${mainImage.path}`
-          : `${this.$storageUrl}/images/shadow_character.png`
+          : `${this.$publicAssetsUrl}/images/shadow_character.png`
     },
     getBackgroundColorByElement(element) {
       return element.slug + '-background'

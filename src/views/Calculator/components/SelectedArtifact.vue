@@ -1,7 +1,7 @@
 <template>
   <div :class="['artifact', slug]">
     <img
-        :src="`${this.$storageUrl}/images/artifacts/icons/${slug}.png`"
+        :src="`${this.$publicAssetsUrl}/images/artifacts/icons/${slug}.png`"
         alt=""
         class="artifact-image"
     >
