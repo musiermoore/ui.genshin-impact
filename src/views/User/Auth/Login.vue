@@ -52,7 +52,6 @@ export default {
               this.$router.push({ name: 'Home' })
             }
           } else {
-            console.log(response.data)
             alert(response.data.message)
           }
         }).catch(error => {

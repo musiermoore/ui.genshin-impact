@@ -12,6 +12,7 @@
 
 <script>
 import CharacterCard from "@/views/Character/List/components/CharacterCard"
+
 export default {
   name: "CharacterSelector",
   components: {
@@ -62,7 +63,7 @@ export default {
   height: 200px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 3px;
-  z-index: 9999;
+  z-index: 20;
   overflow-y: scroll;
 }
 

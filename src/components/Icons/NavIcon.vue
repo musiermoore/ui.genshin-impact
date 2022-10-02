@@ -21,7 +21,6 @@ export default {
       }
     },
     width() {
-      console.log(icon);
       return (this.size ? this.size : 20) + 'px'
     },
     height() {

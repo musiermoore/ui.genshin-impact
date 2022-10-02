@@ -134,7 +134,7 @@ export default {
       this.$axios.get(`/admin/characters/${this.$route.params.characterId}/levels/${this.$route.params.levelId}/characteristics`)
           .then((response) => {
             const data = response.data.data
-            console.log(data);
+
             this.characterLevel = data.character_level
             this.characteristics = data.characteristics
           })
@@ -157,7 +157,7 @@ export default {
         const characteristic = this.characterLevel.characteristics.find((characteristic) => {
           return characteristic.id === characteristicId
         })
-        console.log(characteristic);
+
         if (characteristic?.pivot?.value) {
           this.characteristicSaveData.value = characteristic.pivot.value
         } else {
