@@ -20,7 +20,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 100;
-  background: transparent;
+  background: var(--background-color);
 }
 
 .loader {
