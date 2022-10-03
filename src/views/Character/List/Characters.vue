@@ -30,7 +30,7 @@
 <script>
 import Layout from "@/components/Layout"
 import DataLoader from "@/components/Loaders/DataLoader"
-import CharacterCard from "./components/CharacterCard"
+import CharacterCard from "@/components/Character/CharacterCard"
 
 export default {
   name: "Characters",
