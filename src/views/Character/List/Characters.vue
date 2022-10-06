@@ -16,7 +16,9 @@
     <div v-if="loaded">
       <div class="lists" v-if="characters && characters.length">
         <div class="list-item" v-for="character in characters" :key="character.id">
-          <CharacterCard :character="character" />
+          <router-link :to="{ name: 'Edit Character', params: { id: character.id }}">
+            <CharacterCard :character="character" />
+          </router-link>
         </div>
       </div>
       <div v-else>
