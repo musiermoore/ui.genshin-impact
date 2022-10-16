@@ -88,7 +88,6 @@ export default {
     return {
       loaded: false,
       weaponLoaded: false,
-      artifacts: {},
       calculatedCharacteristics: {},
       showCalculatorSelector: false,
       calculatorSelectorTab: 'character'
@@ -99,6 +98,7 @@ export default {
     this.getCharacteristics()
     this.getCharacters()
     this.getWeapons()
+    this.getArtifacts()
   },
   computed: {
     characters() {
@@ -118,6 +118,9 @@ export default {
     },
     weapon() {
       return this.$store.getters.selectedCalculatorWeapon
+    },
+    artifacts() {
+      return this.$store.getters.selectedCalculatorArtifacts
     }
   },
   watch: {
@@ -176,6 +179,21 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.$store.commit('calculatorCharacteristics', response.data.data.characteristics)
+            }
+          })
+    },
+    getArtifacts() {
+      if (this.artifacts?.length) {
+        return;
+      }
+
+      this.$axios.get('/artifacts/calculator')
+          .then((response) => {
+            if (response.status === 200) {
+              this.$store.commit('calculatorArtifacts', response.data.data.artifacts)
+              this.$store.commit('artifactTypeCharacteristics', response.data.data.artifact_type_characteristics)
+              this.$store.commit('baseArtifactCharacteristics', response.data.data.base_characteristics)
+              this.$store.commit('extraArtifactCharacteristics', response.data.data.extra_characteristics)
             }
           })
     },
