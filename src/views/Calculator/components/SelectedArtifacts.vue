@@ -5,6 +5,8 @@
       <div v-for="artifactType in artifactTypes" :key="artifactType.slug">
         <SelectedArtifact
             :slug="artifactType.slug"
+            :pointer="true"
+            @click="openCalculatorSelector"
         />
       </div>
     </div>
@@ -12,32 +14,26 @@
 </template>
 
 <script>
-import SelectedArtifact from "./SelectedArtifact";
+import SelectedArtifact from "./SelectedArtifact"
+import getBaseArtifactInformation from "@/mixins/Calculator/getBaseArtifactInformation"
 
 export default {
   name: "SelectedArtifacts",
+  mixins: [
+    getBaseArtifactInformation
+  ],
   components: {
     SelectedArtifact,
   },
   data() {
     return {
-      artifactTypes: [
-        {
-          slug: 'flower-of-life'
-        },
-        {
-          slug: 'plume-of-death'
-        },
-        {
-          slug: 'sands-of-eon'
-        },
-        {
-          slug: 'goblet-of-eonothem'
-        },
-        {
-          slug: 'circlet-of-logos'
-        },
-      ]
+      artifactTypes: this.getArtifactTypes()
+    }
+  },
+  methods: {
+    openCalculatorSelector() {
+      this.$emit('change-calculator-selector-visible', true)
+      this.$emit('change-calculator-selector-tab', 'artifacts')
     }
   }
 }
@@ -56,14 +52,9 @@ export default {
   justify-content: center;
   align-items: center;
   width: 80px;
-  height: 80px;
+  height: 90px;
   border: 2px solid #fff;
-  border-radius: 50%;
+  border-radius: 20px;
   overflow: hidden;
-}
-
-.artifacts .artifact .artifact-image {
-  width: auto;
-  height: auto;
 }
 </style>
