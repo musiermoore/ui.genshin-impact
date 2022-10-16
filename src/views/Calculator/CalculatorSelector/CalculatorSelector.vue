@@ -20,16 +20,14 @@
         >Артефакты</div>
       </div>
       <div class="sections">
-        <div v-if="activeTab === 'character'" class="section-body character">
-          <CharacterSection
-
-          />
+        <div v-show="activeTab === 'character'" class="section-body character">
+          <CharacterSection />
         </div>
-        <div v-else-if="activeTab === 'weapon'" class="section-body weapon">
+        <div v-show="activeTab === 'weapon'" class="section-body weapon">
           <WeaponSection />
         </div>
-        <div v-else-if="activeTab === 'artifacts'" class="section-body artifacts">
-          В разработке
+        <div v-show="activeTab === 'artifacts'" class="section-body artifacts">
+          <ArtifactsSection />
         </div>
       </div>
     </div>
@@ -39,12 +37,14 @@
 <script>
 import CharacterSection from "./components/CharacterSection"
 import WeaponSection from "./components/WeaponSection"
+import ArtifactsSection from "./components/ArtifactsSection"
 
 export default {
   name: "CalculatorSelector",
   components: {
     CharacterSection,
-    WeaponSection
+    WeaponSection,
+    ArtifactsSection
   },
   props: {
     tab: {
@@ -162,6 +162,7 @@ export default {
   overflow: hidden;
 }
 .calculator-selector .selectors .sections .section-body  {
+  width: 100%;
   padding: 0 10px;
 }
 </style>
