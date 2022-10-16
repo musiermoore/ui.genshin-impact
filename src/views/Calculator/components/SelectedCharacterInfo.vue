@@ -92,7 +92,7 @@ export default {
     openCalculatorSelector() {
       this.$emit('change-calculator-selector-visible', true)
       this.$emit('change-calculator-selector-tab', 'character')
-    },
+    }
   }
 }
 </script>
