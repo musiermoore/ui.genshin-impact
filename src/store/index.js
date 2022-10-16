@@ -1,21 +1,17 @@
 import { createStore } from 'vuex'
 
-import getBaseWeaponInformation from "@/mixins/Calculator/getBaseWeaponInformation"
-import getBaseCharacterInformation from "@/mixins/Calculator/getBaseCharacterInformation"
-import calculatorInformation from "@/mixins/Calculator/calculatorInformation"
+import CalculatorLists from "./Calculator/CalculatorLists"
+import CalculatorSelectedData from "./Calculator/CalculatorSelectedData"
 
 const store = createStore({
+    modules: {
+        calculatorLists: CalculatorLists,
+        calculatorSelectedData: CalculatorSelectedData
+    },
     state () {
         return {
             user: null,
-            mainLoaded: false,
-            calculatorCharacters: {},
-            calculatorCharacteristics: {},
-            calculatorWeapons: [],
-            selectedCalculatorWeapon: getBaseWeaponInformation.methods.getBaseWeapon(),
-            selectedCalculatorWeaponLevel: 0,
-            selectedCalculatorCharacter: getBaseCharacterInformation.methods.getBaseCharacter(),
-            selectedCalculatorCharacterLevel: 0
+            mainLoaded: false
         }
     },
     mutations: {
@@ -24,33 +20,6 @@ const store = createStore({
         },
         mainLoaded (state, status) {
             state.mainLoaded = status
-        },
-        calculatorCharacters (state, characters) {
-            state.calculatorCharacters = characters
-        },
-        calculatorCharacteristics (state, characteristics) {
-            state.calculatorCharacteristics = characteristics
-        },
-        calculatorWeapons (state, weapons) {
-            state.calculatorWeapons = weapons
-        },
-        selectedCalculatorCharacter (state, character) {
-            state.selectedCalculatorCharacter = character
-        },
-        selectedCalculatorCharacterLevel (state, level) {
-            state.selectedCalculatorCharacterLevel = level
-
-            calculatorInformation.methods.setCharacterLevelToSelectedCharacter()
-        },
-        selectedCalculatorWeapon (state, weapon) {
-            state.selectedCalculatorWeapon = weapon?.id
-                ? weapon
-                : getBaseWeaponInformation.methods.getBaseWeapon()
-        },
-        selectedCalculatorWeaponLevel (state, level) {
-            state.selectedCalculatorWeaponLevel = level
-
-            calculatorInformation.methods.setWeaponLevelToSelectedWeapon()
         }
     },
     getters: {
@@ -59,27 +28,6 @@ const store = createStore({
         },
         mainLoaded (state) {
             return state.mainLoaded
-        },
-        calculatorCharacters (state) {
-            return state.calculatorCharacters
-        },
-        calculatorCharacteristics (state) {
-            return state.calculatorCharacteristics
-        },
-        calculatorWeapons (state) {
-            return state.calculatorWeapons
-        },
-        selectedCalculatorCharacter (state) {
-            return state.selectedCalculatorCharacter
-        },
-        selectedCalculatorCharacterLevel (state) {
-            return state.selectedCalculatorCharacterLevel
-        },
-        selectedCalculatorWeapon (state) {
-            return state.selectedCalculatorWeapon
-        },
-        selectedCalculatorWeaponLevel (state) {
-            return state.selectedCalculatorWeaponLevel
         }
     }
 })
